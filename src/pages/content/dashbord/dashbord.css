@@ -1,0 +1,234 @@
+.event_name{
+font-size: 20px;
+font-weight: 600;
+line-height: 28px;
+text-align: start
+}
+.sub_name{
+color: #18B677;
+}
+.menu_itam{
+    width: 100%;
+    height: 189px;
+    padding: 32px 1px;
+    border-radius: 8px;
+    border: 1px solid #D28B01;
+    background: linear-gradient(227.52deg, #FFF6D4 4.57%, #FFDDA7 120.6%);
+}
+.dh-count{
+font-size: 50px;
+color: #6B4907;
+font-weight: 600;
+line-height: 43px;
+
+}
+.dh-sub-description{
+    font-size: 14px;
+    color: #89641F;  
+    font-weight: 500; 
+    line-height: 29px;
+}
+.menu_itam2{
+    width: 100%;
+    height: 189px;
+    padding: 32px 1px;
+    border-radius: 8px;
+    border: 1px solid #59A631;
+    background: linear-gradient(226.55deg, #FEFFCE 5.51%, #C3FFB4 114.48%);
+
+}
+.dh-count2{
+font-size: 50px;
+color: #267400;
+font-weight: 600;
+line-height: 43px;
+
+}
+.dh-sub-description2{
+    font-size: 14px;
+    color: #45991C;  
+    font-weight: 500; 
+    line-height: 29px;
+}
+.dh-currency{
+  font-weight: 600;
+  font-size: 20px;
+  color: #267400;  
+}
+.menu_itam3{
+    width: 100%;
+    height: 189px;
+    border-radius: 8px;
+    border: 1px solid #EFEFEF;
+}
+.event_d{
+font-size: 14px;
+font-weight: 600;
+text-align: start;
+}
+.event_d_data{
+color:#18B677 ;
+margin-left: 5px;
+}
+.border_line{
+width: 100%;
+border-bottom: 1px solid #CACACA;
+
+}
+.event_d_grid{
+padding: 20px 15px;
+}
+.dh_data_head{
+font-size: 12px;
+line-height: 16px;
+color: #7D7D7D;
+font-weight: 400;
+margin-bottom: 0;
+}
+.dh_data{
+font-size:14px ;
+font-weight: 500;
+line-height: 19px;
+margin-bottom: 0;
+}
+.section_d{
+text-align: start;
+}
+.event_name_sub{
+ font-size:16px ;
+ font-weight: 600;
+ text-align: start;
+}
+.dh_summary_section{
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #EFEFEF;
+}
+.col-20{
+width: 20%!important;
+}
+.borderRow_bottom{
+border-bottom: 1px solid #EFEFEF;
+border-left: 1px solid #EFEFEF;
+}
+.borderCol_right{
+ border-right: 1px solid #EFEFEF;
+}
+.event_d_grid2{
+    padding: 20px;
+}
+.line_summary_table{
+border-bottom: 1px solid #EFEFEF;
+
+}
+.box_name{
+font-size: 16px;
+font-weight: 400;
+color:#515151 ;
+margin-bottom: 0;
+}
+.box_data_1{
+ font-size: 28px;
+ color:#08C21A ;
+ font-weight: 600;
+}
+.box_data_2{
+ color:#000000 ;
+}
+.box_grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  /* input icon search */
+  .input-with-icon {
+    position: relative;
+    /* width: 100%;  */
+  }
+  
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px; /* Adjust the left position based on your design */
+    transform: translateY(-50%);
+    color: #000000; /* Optional: Change the color of the icon */
+  }
+  
+  .search-input {
+    width: 100%;
+    padding-left: 35px; /* Add padding to the left to prevent the text from overlapping with the icon */
+    padding-right: 10px;
+    height: 33px; /* Optional: Adjust the height */
+    border: 1px solid #E4E4E4; /* Optional: Border style */
+    border-radius: 8px; /* Optional: Rounded corners */
+    font-size: 12px; /* Optional: Font size */
+    box-sizing: border-box; /* Ensures padding doesn't affect the input's width */
+  }
+  .table_data_grid{
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #EFEFEF;
+    padding: 10px;
+  }
+  .inventory_td{
+    border-bottom: hidden;
+  }
+  .table_header_text{
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    color: #474747!important;
+  }
+  .inventory_td{
+    font-size: 12px;
+    font-weight: 500;
+    color: #000000!important;
+    line-height: 16px;
+    padding-top: 15px!important;
+    padding-bottom: 15px!important;
+  }
+  .check_in {
+    background-color: #B5FFBC; /* Set the background color to red */
+    text-align: center; /* Center the text horizontally */
+    padding: 4px 10px; /* Add some padding to make the text more centered */
+    display: flex; /* Use flexbox to center the text vertically */
+    justify-content: center; /* Center the text horizontally */
+    align-items: center; /* Center the text vertically */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    font-size: 12px;
+    color: #00900A;
+    font-weight: 500;
+  }
+  .check_icon{
+    background-color: #FFEEB8;
+    text-align: center;
+    padding: 2px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 21px;
+    color: #D49500;
+    font-weight: 500;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .image_hide{
+        display: none;
+    }
+    .table_scroll{
+    overflow-y: scroll;
+    }
+    .off-canvas {
+        width: 100%;
+    
+    }
+}
+
+  

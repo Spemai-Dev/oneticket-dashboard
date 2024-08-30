@@ -1,0 +1,87 @@
+@media (min-width: 769px) and (max-width: 1580px) {
+    .footer2 {
+        margin-top: 90% !important;
+    }
+}
+
+@media (min-width: 1580px) {
+    .footer2 {
+        margin-top: 180% !important;
+    }
+}
+
+.canvas_body {
+    padding: 20px;
+}
+
+.canvas_body2 {
+    height: 100vh;
+    overflow-y: scroll;
+    padding-bottom: 135px;
+}
+
+.canvas_body {
+    text-align: start;
+    min-height: 100vh;
+    /* Ensures the canvas takes up at least the full viewport height */
+    padding: 28px;
+    box-sizing: border-box;
+}
+
+.canvas_body .row {
+    flex: 1;
+}
+
+
+
+.button_apply,
+.button_apply_close {
+    margin-left: 10px;
+}
+
+.lable_name {
+    font-size: 16px;
+    font-weight: 400;
+    color: #3F3F3F;
+    line-height: 32px;
+}
+
+.lable_date {
+    font-size: 16px;
+    color: #3F3F3F;
+    font-weight: 600;
+    line-height: 32px;
+}
+
+.footer2 {
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    font-size: 14px;
+    color: #8B8B8B;
+    font-weight: 400;
+    margin-top: 14px;
+    background: white;
+    width: 500px;
+    padding-bottom: 12px;
+    padding-right: 26px;
+}
+
+.footer_btn {
+    width: 100%;
+    height: 52px;
+    color: #FF0000;
+    padding: 10px;
+    gap: 10px;
+    border-radius: 10px;
+    border: none;
+    opacity: 0px;
+    background-color: #FFBCBC;
+    font-size: 16px;
+    font-weight: 500;
+
+}
+.canvas_sub_title{
+font-size: 18px;
+font-weight: 600;
+}
