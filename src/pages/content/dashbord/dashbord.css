@@ -16,7 +16,8 @@ color: #18B677;
     background: linear-gradient(227.52deg, #FFF6D4 4.57%, #FFDDA7 120.6%);
 }
 .dh-count{
-font-size: 50px;
+font-size: 36px;
+/* font-size: 50px; */
 color: #6B4907;
 font-weight: 600;
 line-height: 43px;
@@ -38,7 +39,7 @@ line-height: 43px;
 
 }
 .dh-count2{
-font-size: 50px;
+font-size: 36px;
 color: #267400;
 font-weight: 600;
 line-height: 43px;
@@ -48,7 +49,7 @@ line-height: 43px;
     font-size: 14px;
     color: #45991C;  
     font-weight: 500; 
-    line-height: 29px;
+    line-height: 15px;
 }
 .dh-currency{
   font-weight: 600;
@@ -129,7 +130,8 @@ color:#515151 ;
 margin-bottom: 0;
 }
 .box_data_1{
- font-size: 28px;
+ /* font-size: 28px; */
+ font-size: 25px;
  color:#08C21A ;
  font-weight: 600;
 }
@@ -229,6 +231,10 @@ margin-bottom: 0;
         width: 100%;
     
     }
+}
+.coomin_zoon{
+  padding-top: 3rem!important;
+  padding-bottom: 3rem!important;
 }
 
   

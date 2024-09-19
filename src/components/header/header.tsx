@@ -49,7 +49,7 @@ function Header() {
             <div className="collapse navbar-collapse" id="navbarContent">
                 <ul className="navbar-nav ms-auto">
                     <li className="nav-item">
-                        <button className="logout" onClick={handleLogout}>
+                        <button  className="logout" onClick={handleLogout}>
                             Logout
                         </button>
                     </li>

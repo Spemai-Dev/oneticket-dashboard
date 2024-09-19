@@ -15,9 +15,8 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<SigninPage />} />
-          {/* <Route path="dashbord" element={<Dashbord />} /> */}
-          <Route path="dashbord" element={<PrivateRoute path="dashbord" component={Layout} />} >
+          {/* <Route path="/" element={<SigninPage />} /> */}
+          <Route path="/" element={<PrivateRoute path="dashbord" component={Layout} />} >
             <Route index path="" element={<PrivateRoute path="dashbord" component={Dashbord} />} />
           </Route>
         </Routes>
