@@ -19,7 +19,7 @@ const ViewTransaction = (props: any) => {
                 <div className="canvas_body">
                     <div className="row">
                         <div className="col-12 d-flex justify-content-between mb-2">
-                            <div className="tittle">View event details</div>
+                            <div className="tittle">View Details</div>
                             <img
                                 className="pe-2 close-icon"
                                 src={group1}
@@ -31,7 +31,7 @@ const ViewTransaction = (props: any) => {
                     <div className="row canvas_body2">
                         <div className="col-12">
                         <div className="d">
-                        <h4 className="canvas_sub_title mt-2 mb-2">User details</h4>
+                        <h4 className="canvas_sub_title mt-2 mb-2">User Details</h4>
                         <div className="row">
                             <div className="col-6"><span className="lable_name">First Name </span></div>
                             <div className="col-6"><span className="lable_date">: John</span></div>
@@ -41,11 +41,11 @@ const ViewTransaction = (props: any) => {
                             <div className="col-6"><span className="lable_date">: John</span></div>
                         </div>
                         <div className="row">
-                            <div className="col-6"><span className="lable_name">Email address</span></div>
+                            <div className="col-6"><span className="lable_name">Email Address</span></div>
                             <div className="col-6"><span className="lable_date">: John</span></div>
                         </div>
                         <div className="row">
-                            <div className="col-6"><span className="lable_name">Phone number</span></div>
+                            <div className="col-6"><span className="lable_name">Phone Number</span></div>
                             <div className="col-6"><span className="lable_date">: 07177484894</span></div>
                         </div>
                         <div className="row">
@@ -64,9 +64,9 @@ const ViewTransaction = (props: any) => {
                             <div className="col-6"><span className="lable_name">Address</span></div>
                             <div className="col-6"><span className="lable_date">: John</span></div>
                         </div>
-                        <h4 className="canvas_sub_title mt-2 mb-2">Payment details</h4>
+                        <h4 className="canvas_sub_title mt-2 mb-2">Payment Details</h4>
                         <div className="row">
-                            <div className="col-6"><span className="lable_name">Date and time</span></div>
+                            <div className="col-6"><span className="lable_name">Date and Time</span></div>
                             <div className="col-6"><span className="lable_date">: John</span></div>
                         </div>
                         <div className="row">
@@ -78,20 +78,20 @@ const ViewTransaction = (props: any) => {
                             <div className="col-6"><span className="lable_date">: Visa</span></div>
                         </div>
                         <div className="row">
-                            <div className="col-6"><span className="lable_name">Transaction status</span></div>
+                            <div className="col-6"><span className="lable_name">Transaction Status</span></div>
                             <div className="col-6"><span className="lable_date">: Success</span></div>
                         </div>
-                        <h4 className="canvas_sub_title mt-2 mb-2">Ticket details</h4>
+                        <h4 className="canvas_sub_title mt-2 mb-2">Ticket Details</h4>
                         <div className="row">
                             <div className="col-6"><span className="lable_name">Event Name</span></div>
                             <div className="col-6"><span className="lable_date">: Success</span></div>
                         </div>
                         <div className="row">
-                            <div className="col-6"><span className="lable_name">No of tickets</span></div>
+                            <div className="col-6"><span className="lable_name">No of Tickets</span></div>
                             <div className="col-6"><span className="lable_date">: 2</span></div>
                         </div>
                         <div className="row">
-                            <div className="col-6"><span className="lable_name">Ticket category</span></div>
+                            <div className="col-6"><span className="lable_name">Ticket Category</span></div>
                             <div className="col-6"><span className="lable_date">: Success</span></div>
                         </div>
                         <div className="row">

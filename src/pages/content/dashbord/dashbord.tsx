@@ -112,13 +112,13 @@ function Dashbord() {
                             <div className='col-6'>
                                 <div className='menu_itam'  >
                                     <p className='dh-count mt-3'>{totalTicketsSold}</p>
-                                    <p className='dh-sub-description mt-3'>Total ticket sale</p>
+                                    <p className='dh-sub-description mt-3'>Number of Ticket Sale</p>
                                 </div>
                             </div>
                             <div className='col-6'>
                                 <div className='menu_itam2'  >
                                     <p className='dh-count2 mt-3'>{totalSalesAmount.toFixed(2)}  <span className='dh-currency'>{eventData.tickets_currency || 'N/A'}</span></p>
-                                    <p className='dh-sub-description2 mt-3'>Total ticket sale</p>
+                                    <p className='dh-sub-description2 mt-3'>otal Ticket Sale (Net Amount)</p>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +129,7 @@ function Dashbord() {
                             <div className='row'>
                                 <div className='col-sm-12 col-md-8 col-lg-8' >
                                     <div className='event_d_grid'>
-                                        <h3 className='event_d'>Event details :<span className='event_d_data'>{eventData.event_name || 'N/A'}</span></h3>
+                                        <h3 className='event_d'>Event Name :<span className='event_d_data'>{eventData.event_name || 'N/A'}</span></h3>
                                         <div className='border_line mt-3 mb-3'></div>
                                         <div className='row mb-4'>
                                             <div className='col-6'>
@@ -141,7 +141,7 @@ function Dashbord() {
                                             </div>
                                             <div className='col-6'>
                                                 <div className="section_d">
-                                                    <p className="dh_data_head">Expire date and time</p>
+                                                    <p className="dh_data_head">Event Expire Date</p>
                                                     <p className="dh_data">{formatDate(eventData.event_expire_on) || 'N/A'}
                                                     </p>
                                                 </div>
@@ -191,39 +191,74 @@ function Dashbord() {
                     <div className="row" style={{ display: 'flex' }}>
                         <div className='col-sm-12 col-md-5 col-lg-7' style={{ display: 'flex', flexDirection: 'column' }}>
                             <div className='event_d_grid2' style={{ flexGrow: 1 }}>
+                            <div className='row'>
+                                     <div className='col-20'>
+                                         <div className="section_d">
+                                             <p className="dh_data_head event_ticket_name"style={{color:'#C67300'}}>
+                                                 Ticket Name
+                                             </p>
+                                           
+                                         </div>
+                                     </div>
+                                     <div className='col-20'>
+                                         <div className="section_d">
+                                             <p className="dh_data_head event_ticket_name">Total Tickets</p>
+                                            
+                                         </div>
+                                     </div>
+                                     <div className='col-20'>
+                                         <div className="section_d">
+                                             <p className="dh_data_head event_ticket_name">Remaining Tickets</p>
+                                             
+                                         </div>
+                                     </div>
+                                     <div className='col-20'>
+                                         <div className="section_d">
+                                             <p className="dh_data_head event_ticket_name">Price</p>
+                                            
+                                         </div>
+                                     </div>
+                                     <div className='col-20'>
+                                         <div className="section_d">
+                                             <p className="dh_data_head event_ticket_name">Display Price</p>
+                                            
+                                         </div>
+                                     </div>
+                                 </div>
                                 {hasTickets ? (
+                                    
                                     data.map(ticket => (
                                         <React.Fragment key={ticket.id}>
                                             <div className='row'>
                                                 <div className='col-20'>
                                                     <div className="section_d">
-                                                        <p className="dh_data_head" style={{ color: ticket.ticket_name === 'VIP' ? '#C67300' : (ticket.ticket_name === 'General' ? '#016FD0' : '#D001A0') }}>
+                                                        {/* <p className="dh_data_head" style={{ color: ticket.ticket_name === 'VIP' ? '#C67300' : (ticket.ticket_name === 'General' ? '#016FD0' : '#D001A0') }}>
                                                             Ticket name
-                                                        </p>
+                                                        </p> */}
                                                         <p className="dh_data">{ticket.ticket_name}</p>
                                                     </div>
                                                 </div>
                                                 <div className='col-20'>
                                                     <div className="section_d">
-                                                        <p className="dh_data_head">Total tickets</p>
+                                                        {/* <p className="dh_data_head">Total tickets</p> */}
                                                         <p className="dh_data">{ticket.total_tickets}</p>
                                                     </div>
                                                 </div>
                                                 <div className='col-20'>
                                                     <div className="section_d">
-                                                        <p className="dh_data_head">Remaining tickets</p>
+                                                        {/* <p className="dh_data_head">Remaining tickets</p> */}
                                                         <p className="dh_data">{ticket.remaining_tickets}</p>
                                                     </div>
                                                 </div>
                                                 <div className='col-20'>
                                                     <div className="section_d">
-                                                        <p className="dh_data_head">Price</p>
+                                                        {/* <p className="dh_data_head">Price</p> */}
                                                         <p className="dh_data">{ticket.ticket_amount}</p>
                                                     </div>
                                                 </div>
                                                 <div className='col-20'>
                                                     <div className="section_d">
-                                                        <p className="dh_data_head">Visualise price</p>
+                                                        {/* <p className="dh_data_head">Visualise price</p> */}
                                                         <p className="dh_data">{ticket.ticket_visualize_amount}</p>
                                                     </div>
                                                 </div>
@@ -277,10 +312,10 @@ function Dashbord() {
                 {/* data table */}
                 <div className="row mb-4 mt-4">
                     <div className="col d-flex justify-content-between align-items-center">
-                        <h3 className="event_name_sub mb-4 mt-4">Participant list</h3>
+                        <h3 className="event_name_sub mb-4 mt-4">Participants List</h3>
 
                         <div className="d-flex justify-content-end align-items-center">
-                            <span style={{ color: '#8E00AB', fontSize: 'large' }}><CgSoftwareDownload /><span style={{ fontSize: '14px', color: '#8E00AB', marginLeft: '3px', fontWeight: '500', marginRight: '10px' }}>Download report</span></span>
+                            <span style={{ color: '#8E00AB', fontSize: 'large' }}><CgSoftwareDownload /><span style={{ fontSize: '14px', color: '#8E00AB', marginLeft: '3px', fontWeight: '500', marginRight: '10px' }}>Download Reports</span></span>
 
                             <div className="input-with-icon">
                                 <IoSearchOutline className="search-icon" />

@@ -86,6 +86,9 @@ color: #7D7D7D;
 font-weight: 400;
 margin-bottom: 0;
 }
+.event_ticket_name{
+  margin-bottom: 1rem;
+}
 .dh_data{
 font-size:14px ;
 font-weight: 500;
