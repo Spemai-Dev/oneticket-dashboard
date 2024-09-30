@@ -118,7 +118,7 @@ function Dashbord() {
                             <div className='col-6'>
                                 <div className='menu_itam2'  >
                                     <p className='dh-count2 mt-3'>{totalSalesAmount.toFixed(2)}  <span className='dh-currency'>{eventData.tickets_currency || 'N/A'}</span></p>
-                                    <p className='dh-sub-description2 mt-3'>otal Ticket Sale (Net Amount)</p>
+                                    <p className='dh-sub-description2 mt-3'>Total Ticket Sale (Net Amount)</p>
                                 </div>
                             </div>
                         </div>
