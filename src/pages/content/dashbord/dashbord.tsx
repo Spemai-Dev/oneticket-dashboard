@@ -44,7 +44,7 @@ function Dashbord() {
         // setIsLoading(true);
 
         axios
-            .get(`${environment.BASE_URL}/events/event-details/?event_id=NFQJ118E62408C8D78D06`)
+            .get(`${environment.BASE_URL}/events/event-details/?event_id=FGTN118E67C39910EAB29`)
             .then((res) => {
                 console.log(res, '55555');
                 const data = res?.data;
@@ -276,7 +276,7 @@ function Dashbord() {
                             {hasTickets ? (
                                 <div className='row borderRow_bottom' style={{ flexGrow: 1 }}>
                                     {data.map(ticket => (
-                                        <div key={ticket.id} className='col-4 borderCol_right box_grid'>
+                                        <div key={ticket.id} className='col-4 borderCol_right box_grid '>
                                             <p className='box_name'>{ticket.ticket_name}</p>
                                             <h4 className='box_data_1'>{parseTicketValue(ticket.remaining_tickets)}<span className='box_data_2'>/{parseTicketValue(ticket.total_tickets)}</span></h4>
                                         </div>
@@ -286,7 +286,7 @@ function Dashbord() {
 
                             ) : (
                                 <div className='row borderRow_bottom' style={{ flexGrow: 1 }}>
-                                    <div className='col-4 borderCol_right box_grid'>
+                                    <div className='col-4 borderCol_right box_grid update_grid'>
                                         <p className='box_name'>No Data</p>
                                         <h4 className='box_data_1'>--<span className='box_data_2'>/--</span></h4>
                                     </div>
@@ -301,7 +301,7 @@ function Dashbord() {
 
                                 </div>
 
-                                <div className='col-4' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <div className='col-4 borderCol_right update_grid' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
                                 </div>
                             </div>

@@ -113,11 +113,15 @@ text-align: start;
 width: 20%!important;
 }
 .borderRow_bottom{
-border-bottom: 1px solid #EFEFEF;
+/* border-bottom: 1px solid #EFEFEF; */
 border-left: 1px solid #EFEFEF;
 }
 .borderCol_right{
  border-right: 1px solid #EFEFEF;
+ border-top: 1px solid #EFEFEF;
+}
+.update_grid{
+  border-right: none!important;
 }
 .event_d_grid2{
     padding: 20px;
