@@ -60,21 +60,22 @@ function Dashbord() {
 
         console.log("Reimbursement data", data.data.data);
         setData(data.data.data);
-        await setDefaultEventId(data.data.data[0].event_details);
-        await fetchData(data.data.data[0].event_details);
-        await getDataParticipants(data.data.data[0].event_details)
-        // await getDataParticipants('FHKJK56878988HHF')
-        await getVolume(data.data.data[0].event_details)
+         setDefaultEventId(data.data.data[0].event_details);
+         fetchData(data.data.data[0].event_details);
+         getDataParticipants(data.data.data[0].event_details)
+         getVolume(data.data.data[0].event_details)
 
     };
+    const newEvent = async (id) => {
+        // const data = await getALLevent();
 
+        
+         setDefaultEventId(id);
+    
+         getDataParticipants(id)
+         getVolume(id)
 
-
-
-
-
-
-
+    };
 
     const hasTickets = true;
 
@@ -92,12 +93,15 @@ function Dashbord() {
         return formattedDate;
     };
     const fetchData = async (eventId) => {
+        
         if (!eventId) return; // Make sure the eventId is available before fetching
         const data = await getEventDetails(eventId);
         if (data.data?.status === 100) {
+            newEvent(eventId)
             console.log(data.data.data, 'rroof')
             setEventData(data.data.data);
             setEventDetails(data.data.data.tickets);
+            
         } else {
             console.error(data.message || 'Getting events failed!');
             toast.error('Getting events failed!', { id: 'getEvents' });
@@ -132,15 +136,8 @@ function Dashbord() {
         console.log("detailss", data.data.data);
 
     };
-    // useEffect(() => {
-    //     if (event && event.length > 0) {
-    //         setDefaultEventId(event[0].event_details);
-    //     }
-    // }, [event]);
     useEffect(() => {
         getData()
-        // fetchData(defaultEventId);
-        // getDataParticipants(defaultEventId)
     }, []);
     if (!eventData) {
         return <p style={{
@@ -150,8 +147,14 @@ function Dashbord() {
             height: '80vh'
         }}>Loading...</p>;
     }
+
+
+
+
+
+    
     const parseTicketValue = (value: string): number => {
-        return parseInt(value, 10) || 0; // Default to 0 if parsing fails
+        return parseInt(value, 10) || 0; 
     };
     const totalTicketsSold = data.reduce((acc, ticket) => {
         return acc + (parseInt(ticket.total_tickets, 10) - parseInt(ticket.remaining_tickets, 10));
@@ -203,7 +206,7 @@ function Dashbord() {
                             <div className='col-6'>
                                 <div className='menu_itam'  >
                                     {/* <p className='dh-count mt-3'>{totalTicketsSold}</p> */}
-                                    <p className='dh-count mt-3'> {(volume && volume.total_tickets && !isNaN(volume.total_tickets) ? volume.total_tickets : 'N/A')}</p>
+                                    <p className='dh-count mt-3'> {(volume && volume.total_tickets && !isNaN(volume.total_tickets) ? volume.total_tickets : '0')}</p>
                                     <p className='dh-sub-description mt-3'>Number of Ticket Sale</p>
                                 </div>
                             </div>
@@ -211,7 +214,7 @@ function Dashbord() {
                                 <div className='menu_itam2'  >
                                     {/* <p className='dh-count2 mt-3'>{totalSalesAmount.toFixed(2)}  <span className='dh-currency'>{eventData.tickets_currency || 'N/A'}</span></p> */}
                                     <p className='dh-count2 mt-3'>
-                                        {(volume && volume.total_amount && !isNaN(volume.total_amount) ? volume.total_amount.toFixed(2) : 'N/A')}
+                                        {(volume && volume.total_amount && !isNaN(volume.total_amount) ? volume.total_amount.toFixed(2) : '0.00')}
                                         <span className='dh-currency'>{eventData && eventData.tickets_currency ? eventData.tickets_currency : 'N/A'}</span>
                                     </p>
                                     {/* <p className='dh-sub-description2 mt-3'>
@@ -316,6 +319,12 @@ function Dashbord() {
                                     </div>
                                     <div className='col-20'>
                                         <div className="section_d">
+                                            <p className="dh_data_head event_ticket_name">Display Price</p>
+
+                                        </div>
+                                    </div>
+                                    <div className='col-20'>
+                                        <div className="section_d">
                                             <p className="dh_data_head event_ticket_name">Tickets Avalability</p>
 
                                         </div>
@@ -326,12 +335,7 @@ function Dashbord() {
 
                                         </div>
                                     </div> */}
-                                    <div className='col-20'>
-                                        <div className="section_d">
-                                            <p className="dh_data_head event_ticket_name">Display Price</p>
-
-                                        </div>
-                                    </div>
+                                   
                                     {/* <div className='col-20'>
                                         <div className="section_d">
                                             <p className="dh_data_head event_ticket_name">Status</p>
@@ -356,10 +360,24 @@ function Dashbord() {
                                                         <p className="dh_data">{ticket.total_tickets}</p>
                                                     </div>
                                                 </div>
+                                                
                                                 <div className='col-20'>
                                                     <div className="section_d">
 
                                                         <p className="dh_data">{ticket.remaining_tickets}</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* <div className='col-20'>
+                                                    <div className="section_d">
+
+                                                        <p className="dh_data">{ticket.ticket_amount}</p>
+                                                    </div>
+                                                </div> */}
+                                                <div className='col-20'>
+                                                    <div className="section_d">
+
+                                                        <p className="dh_data">{ticket.ticket_visualize_amount}</p>
                                                     </div>
                                                 </div>
                                                 <div className='col-20'>
@@ -373,18 +391,6 @@ function Dashbord() {
                                                             )}
                                                         </p>
 
-                                                    </div>
-                                                </div>
-                                                {/* <div className='col-20'>
-                                                    <div className="section_d">
-
-                                                        <p className="dh_data">{ticket.ticket_amount}</p>
-                                                    </div>
-                                                </div> */}
-                                                <div className='col-20'>
-                                                    <div className="section_d">
-
-                                                        <p className="dh_data">{ticket.ticket_visualize_amount}</p>
                                                     </div>
                                                 </div>
                                                 {/* <div className='col-20'>
