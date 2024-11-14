@@ -11,6 +11,7 @@ import { Formik, useFormik, Form, Field, ErrorMessage } from 'formik';
 import toast, { Toaster } from 'react-hot-toast';
 import { useLocation, useSearchParams, Navigate, useNavigate ,useParams} from 'react-router-dom';
 // import spemaiLogo from '../../../../assets/spemaiLogo.png';
+import { sign } from '../../../_services/dashboard';
 
 
 
@@ -23,6 +24,18 @@ interface FormValues {
     password: string;
  
 }
+const saveDataToLocalStorage = (data: string) => {
+    return new Promise<void>((resolve, reject) => {
+        try {
+            // Save the data to localStorage
+            localStorage.setItem('token', data);
+            // localStorage.setItem('user', data);
+            resolve();
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
 
 
 function SigninPage() {
@@ -79,32 +92,33 @@ function SigninPage() {
         
     });
     const handleSubmit = async (data: any, setSubmitting: any) => {
-        console.log('rreere')
-        navigate('/dashbord')
+        // navigate('/dashbord')
 
-        // const params = data.email;
+        const params = data.email;
         // console.log(data, 'form data')
         // let param2 = params
         // console.log(param2,'encriptttt param')
 
-        // try {
-        //     const response = await emailSignup(data);
-        //     const dataPost = await response;
-        //     console.log("Resp54555555onse:", dataPost);
-        //     setSubmitting(false);
-        //     if (dataPost.status == 100) {
-        //         toast.success("Success");
-        //         navigate(`/email-signup-otp/${param2}`)
+        try {
+            const response = await sign(data);
+            const dataPost = await response;
+            console.log("Resp54555555onse:", dataPost);
+            localStorage.setItem("token", dataPost['data']['access'])
+            setSubmitting(false);
+            if (dataPost.status == 100) {
+                saveDataToLocalStorage(dataPost.data?.access)
+                toast.success("Success");
+                navigate(`/`)
               
-        //     } else {
-        //         setSubmitting(false);
-        //         toast.error(dataPost.message)
+            } else {
+                setSubmitting(false);
+                toast.error(dataPost.message)
 
-        //     }
-        // } catch (error) {
-        //     console.error("Error:", error);
-        //     setSubmitting(false);
-        // }
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            setSubmitting(false);
+        }
 
 
     };

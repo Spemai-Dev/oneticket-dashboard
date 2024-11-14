@@ -15,14 +15,14 @@ function Header() {
         // Delete the token or perform any other necessary logout tasks
         deleteToken();
         // Navigate to the login page
-        navigate(`/`);
+        navigate(`/sign`);
     };
     useEffect(() => {
 
     }, []);
 
     return (
-        <header className="navbar navbar-expand-lg">
+        <header className="navbar">
         <div className="container-fluid">
             <Link style={{ textDecoration: "none" }} to="/dashboard" className="navbar-brand">
                 <img
@@ -42,9 +42,10 @@ function Header() {
                 aria-label="Toggle navigation"
                 onClick={handleLogout}
             >
-                <button className="logout" onClick={handleLogout}>
+                  Logout
+                {/* <button className="logout" onClick={handleLogout}>
                     Logout
-                </button>
+                </button> */}
             </button>
             <div className="collapse navbar-collapse" id="navbarContent">
                 <ul className="navbar-nav ms-auto">
@@ -57,6 +58,7 @@ function Header() {
             </div>
         </div>
     </header>
+    
 
 
         // <header className="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">

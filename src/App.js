@@ -15,7 +15,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          {/* <Route path="/" element={<SigninPage />} /> */}
+          <Route path="/sign" element={<SigninPage />} />
           <Route path="/" element={<PrivateRoute path="dashbord" component={Layout} />} >
             <Route index path="" element={<PrivateRoute path="dashbord" component={Dashbord} />} />
           </Route>

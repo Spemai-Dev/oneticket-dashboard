@@ -10,6 +10,11 @@ import { IoEyeOutline } from "react-icons/io5";
 import axios from 'axios';
 import { environment } from '../../../environment/enviroment.js';
 import toast from 'react-hot-toast';
+import { deleteToken } from "../../../_auth/auth.js";
+import { useNavigate } from "react-router-dom";
+import { getALLevent, getEventDetails, getPartiDetails, geteventVolume } from "../../../_services/dashboard.js";
+import { Formik, Form, Field } from 'formik';
+
 interface Ticket {
     id: number;
     ticket_name: string;
@@ -24,8 +29,13 @@ interface Ticket {
 const ticketsData: Ticket[] = [];
 function Dashbord() {
 
-    //   const [events, setEventData] = useState([]);
+    const navigate = useNavigate();
+    const [event, setData] = useState<any>();
+    const [defaultEventId, setDefaultEventId] = useState("")
     const [eventData, setEventData] = useState<any>(null);
+    const [participants, setPartData] = useState<any>(null);
+    const [volume, setVolume] = useState<any>(null);
+
     const [data, setEventDetails] = useState<any>(null);
     const [isCategoryCreateOffCanvasOpen, setIsCategoryCreateOffCanvasOpen] = useState(false);
     const handleOpenOffCanvasCatCreate = () => {
@@ -39,32 +49,35 @@ function Dashbord() {
     const loadDataCreateCat = async (data: any) => {
 
     };
-    const hasTickets = true;
-    const getData = () => {
-        // setIsLoading(true);
-
-        axios
-            .get(`${environment.BASE_URL}/events/event-details/?event_id=FGTN118E67C39910EAB29`)
-            .then((res) => {
-                console.log(res, '55555');
-                const data = res?.data;
-                console.log(data.data);
-                if (data?.status === 100) {
-                    setEventData(data.data);
-                    setEventDetails(data.data.tickets);
-                } else {
-                    console.error(data.message || 'Getting events failed!');
-                    toast.error('Getting events failed!', { id: 'getEvents' });
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-                toast.error('Oh! Something went wrong', { id: 'getEvents' });
-            })
-            .finally(() => {
-                // setIsLoading(false);
-            });
+    const handleLogout = () => {
+        // Delete the token or perform any other necessary logout tasks
+        deleteToken();
+        // Navigate to the login page
+        navigate(`/sign`);
     };
+    const getData = async () => {
+        const data = await getALLevent();
+
+        console.log("Reimbursement data", data.data.data);
+        setData(data.data.data);
+        await setDefaultEventId(data.data.data[0].event_details);
+        await fetchData(data.data.data[0].event_details);
+        await getDataParticipants(data.data.data[0].event_details)
+        // await getDataParticipants('FHKJK56878988HHF')
+        await getVolume(data.data.data[0].event_details)
+
+    };
+
+
+
+
+
+
+
+
+
+    const hasTickets = true;
+
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         const formattedDate = new Intl.DateTimeFormat('en-US', {
@@ -78,17 +91,63 @@ function Dashbord() {
 
         return formattedDate;
     };
+    const fetchData = async (eventId) => {
+        if (!eventId) return; // Make sure the eventId is available before fetching
+        const data = await getEventDetails(eventId);
+        if (data.data?.status === 100) {
+            console.log(data.data.data, 'rroof')
+            setEventData(data.data.data);
+            setEventDetails(data.data.data.tickets);
+        } else {
+            console.error(data.message || 'Getting events failed!');
+            toast.error('Getting events failed!', { id: 'getEvents' });
+        }
+        console.log("detailss", data.data.data);
+    };
 
-    // Call getData inside useEffect
+
+    const getDataParticipants = async (eventId) => {
+        if (!eventId) return; // Make sure the eventId is available before fetching
+        const data = await getPartiDetails(eventId);
+        if (data.data?.status === 100) {
+            console.log(data.data.data, 'participant')
+            setPartData(data.data.data);
+        } else {
+            console.error(data.message || 'Getting events failed!');
+            toast.error('Getting events failed!', { id: 'getEvents' });
+        }
+        console.log("detailss", data.data.data);
+
+    };
+    const getVolume = async (eventId) => {
+        if (!eventId) return; // Make sure the eventId is available before fetching
+        const data = await geteventVolume(eventId);
+        if (data.data?.status === 100) {
+            console.log(data.data.data, 'volume')
+            setVolume(data.data.data);
+        } else {
+            console.error(data.message || 'Getting events failed!');
+            toast.error('Getting events failed!', { id: 'getEvents' });
+        }
+        console.log("detailss", data.data.data);
+
+    };
+    // useEffect(() => {
+    //     if (event && event.length > 0) {
+    //         setDefaultEventId(event[0].event_details);
+    //     }
+    // }, [event]);
     useEffect(() => {
-        getData();
-    }, []); // Empty dependency array ensures this runs only once
+        getData()
+        // fetchData(defaultEventId);
+        // getDataParticipants(defaultEventId)
+    }, []);
     if (!eventData) {
         return <p style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '80vh' // Adjust this value if necessary
+            height: '80vh'
         }}>Loading...</p>;
     }
     const parseTicketValue = (value: string): number => {
@@ -102,22 +161,65 @@ function Dashbord() {
         return acc + (parseInt(ticket.total_tickets, 10) - parseInt(ticket.remaining_tickets, 10)) * parseFloat(ticket.ticket_amount);
     }, 0);
 
+
+
     return (
         <div className='main'>
             <div className="container mt-3">
-                <h3 className='event_name mb-4 mt-1'>Event ticket dashboard <span className='sub_name'>({eventData.event_name || 'N/A'})</span></h3>
+                <h3 className='event_name mb-4 mt-1'>Event ticket dashboard  <span className='sub_name'>
+                    <Formik
+                        initialValues={{ selectedEvent: defaultEventId }}
+                        onSubmit={(values) => {
+                            console.log("Form Submitted with Event ID:", values.selectedEvent);
+                        }}
+                    >
+                        {({ setFieldValue }) => (
+                            <Form>
+                                <Field
+                                    as="select"
+                                    className="select_"
+                                    name="selectedEvent"
+                                    id="event"
+                                    onChange={(e) => {
+                                        const selectedId = e.target.value;
+                                        setFieldValue("selectedEvent", selectedId);
+                                        fetchData(selectedId);
+                                    }}
+                                >
+                                    <option value="" label="Select an event" />
+                                    {event.map((item) => (
+                                        <option key={item.event_details} value={item.event_details}>
+                                            {item.event_name}
+                                        </option>
+                                    ))}
+                                </Field>
+                            </Form>
+                        )}
+                    </Formik>
+                </span></h3>
                 <div className='row'>
                     <div className='col-sm-12 col-md-6 col-lg-6'>
                         <div className='row'>
                             <div className='col-6'>
                                 <div className='menu_itam'  >
-                                    <p className='dh-count mt-3'>{totalTicketsSold}</p>
+                                    {/* <p className='dh-count mt-3'>{totalTicketsSold}</p> */}
+                                    <p className='dh-count mt-3'> {(volume && volume.total_tickets && !isNaN(volume.total_tickets) ? volume.total_tickets : 'N/A')}</p>
                                     <p className='dh-sub-description mt-3'>Number of Ticket Sale</p>
                                 </div>
                             </div>
                             <div className='col-6'>
                                 <div className='menu_itam2'  >
-                                    <p className='dh-count2 mt-3'>{totalSalesAmount.toFixed(2)}  <span className='dh-currency'>{eventData.tickets_currency || 'N/A'}</span></p>
+                                    {/* <p className='dh-count2 mt-3'>{totalSalesAmount.toFixed(2)}  <span className='dh-currency'>{eventData.tickets_currency || 'N/A'}</span></p> */}
+                                    <p className='dh-count2 mt-3'>
+                                        {(volume && volume.total_amount && !isNaN(volume.total_amount) ? volume.total_amount.toFixed(2) : 'N/A')}
+                                        <span className='dh-currency'>{eventData && eventData.tickets_currency ? eventData.tickets_currency : 'N/A'}</span>
+                                    </p>
+                                    {/* <p className='dh-sub-description2 mt-3'>
+                                        {(volume && volume.total_tickets && !isNaN(volume.total_tickets) ? volume.total_tickets.toFixed(2) : 'N/A')}
+                                        <span className='dh-currency'>{eventData && eventData.tickets_currency ? eventData.tickets_currency : 'N/A'}</span>
+                                    </p> */}
+
+
                                     <p className='dh-sub-description2 mt-3'>Total Ticket Sale (Net Amount)</p>
                                 </div>
                             </div>
@@ -191,77 +293,114 @@ function Dashbord() {
                     <div className="row" style={{ display: 'flex' }}>
                         <div className='col-sm-12 col-md-5 col-lg-7' style={{ display: 'flex', flexDirection: 'column' }}>
                             <div className='event_d_grid2' style={{ flexGrow: 1 }}>
-                            <div className='row'>
-                                     <div className='col-20'>
-                                         <div className="section_d">
-                                             <p className="dh_data_head event_ticket_name"style={{color:'#C67300'}}>
-                                                 Ticket Name
-                                             </p>
-                                           
-                                         </div>
-                                     </div>
-                                     <div className='col-20'>
-                                         <div className="section_d">
-                                             <p className="dh_data_head event_ticket_name">Total Tickets</p>
-                                            
-                                         </div>
-                                     </div>
-                                     <div className='col-20'>
-                                         <div className="section_d">
-                                             <p className="dh_data_head event_ticket_name">Remaining Tickets</p>
-                                             
-                                         </div>
-                                     </div>
-                                     <div className='col-20'>
-                                         <div className="section_d">
-                                             <p className="dh_data_head event_ticket_name">Price</p>
-                                            
-                                         </div>
-                                     </div>
-                                     <div className='col-20'>
-                                         <div className="section_d">
-                                             <p className="dh_data_head event_ticket_name">Display Price</p>
-                                            
-                                         </div>
-                                     </div>
-                                 </div>
+                                <div className='row'>
+                                    <div className='col-20'>
+                                        <div className="section_d">
+                                            <p className="dh_data_head event_ticket_name" style={{ color: '#C67300' }}>
+                                                Ticket Name
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                    <div className='col-20'>
+                                        <div className="section_d">
+                                            <p className="dh_data_head event_ticket_name">Total Tickets</p>
+
+                                        </div>
+                                    </div>
+                                    <div className='col-20'>
+                                        <div className="section_d">
+                                            <p className="dh_data_head event_ticket_name">Remaining Tickets</p>
+
+                                        </div>
+                                    </div>
+                                    <div className='col-20'>
+                                        <div className="section_d">
+                                            <p className="dh_data_head event_ticket_name">Tickets Avalability</p>
+
+                                        </div>
+                                    </div>
+                                    {/* <div className='col-20'>
+                                        <div className="section_d">
+                                            <p className="dh_data_head event_ticket_name">Price</p>
+
+                                        </div>
+                                    </div> */}
+                                    <div className='col-20'>
+                                        <div className="section_d">
+                                            <p className="dh_data_head event_ticket_name">Display Price</p>
+
+                                        </div>
+                                    </div>
+                                    {/* <div className='col-20'>
+                                        <div className="section_d">
+                                            <p className="dh_data_head event_ticket_name">Status</p>
+
+                                        </div>
+                                    </div> */}
+                                </div>
                                 {hasTickets ? (
-                                    
+
                                     data.map(ticket => (
                                         <React.Fragment key={ticket.id}>
                                             <div className='row'>
                                                 <div className='col-20'>
                                                     <div className="section_d">
-                                                        {/* <p className="dh_data_head" style={{ color: ticket.ticket_name === 'VIP' ? '#C67300' : (ticket.ticket_name === 'General' ? '#016FD0' : '#D001A0') }}>
-                                                            Ticket name
-                                                        </p> */}
+
                                                         <p className="dh_data">{ticket.ticket_name}</p>
                                                     </div>
                                                 </div>
                                                 <div className='col-20'>
                                                     <div className="section_d">
-                                                        {/* <p className="dh_data_head">Total tickets</p> */}
+
                                                         <p className="dh_data">{ticket.total_tickets}</p>
                                                     </div>
                                                 </div>
                                                 <div className='col-20'>
                                                     <div className="section_d">
-                                                        {/* <p className="dh_data_head">Remaining tickets</p> */}
+
                                                         <p className="dh_data">{ticket.remaining_tickets}</p>
                                                     </div>
                                                 </div>
                                                 <div className='col-20'>
                                                     <div className="section_d">
-                                                        {/* <p className="dh_data_head">Price</p> */}
-                                                        <p className="dh_data">{ticket.ticket_amount}</p>
+
+                                                        <p className='dh_data'>
+                                                            {eventData && eventData.is_sold_out ? (
+                                                                <span className='sold-out'>Sold Out</span>
+                                                            ) : (
+                                                                <span className='available'>Available</span>
+                                                            )}
+                                                        </p>
+
                                                     </div>
                                                 </div>
+                                                {/* <div className='col-20'>
+                                                    <div className="section_d">
+
+                                                        <p className="dh_data">{ticket.ticket_amount}</p>
+                                                    </div>
+                                                </div> */}
                                                 <div className='col-20'>
                                                     <div className="section_d">
-                                                        {/* <p className="dh_data_head">Visualise price</p> */}
+
                                                         <p className="dh_data">{ticket.ticket_visualize_amount}</p>
                                                     </div>
                                                 </div>
+                                                {/* <div className='col-20'>
+                                                    <div className="section_d">
+
+                                                        <p className='dh_data'>
+                                                            {eventData && eventData.is_active ? (
+                                                                <span className='sold-out'>Active</span>
+                                                            ) : (
+                                                                <span className='available'>Deactive</span>
+                                                            )}
+                                                        </p>
+
+                                                    </div>
+                                                </div> */}
+                                                
                                             </div>
                                             <div className='line_summary_table mt-3 mb-3'></div>
                                         </React.Fragment>
@@ -309,12 +448,12 @@ function Dashbord() {
                     </div>
 
                 </div>
-                {/* data table */}
+
                 <div className="row mb-4 mt-4">
                     <div className="col d-flex justify-content-between align-items-center">
                         <h3 className="event_name_sub mb-4 mt-4">Participants List</h3>
 
-                        <div className="d-flex justify-content-end align-items-center">
+                        {/* <div className="d-flex justify-content-end align-items-center">
                             <span style={{ color: '#8E00AB', fontSize: 'large' }}><CgSoftwareDownload /><span style={{ fontSize: '14px', color: '#8E00AB', marginLeft: '3px', fontWeight: '500', marginRight: '10px' }}>Download Reports</span></span>
 
                             <div className="input-with-icon">
@@ -326,15 +465,14 @@ function Dashbord() {
                                 />
                             </div>
 
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className='table_data_grid'>
                     <div className='default-table table-container'>
                         <div className="table_scroll">
-                            {/* <div style={{ overflowX: 'auto' }}> */}
-                            <table className="table align-middle"
-                                style={{ borderTop: "hidden", borderBottom: 'hidden' }}>
+
+                            <table className="table align-middle" style={{ borderTop: "hidden", borderBottom: 'hidden' }}>
                                 <thead>
                                     <tr className="table_header_text">
                                         <th className="table_header_text">TICKET REFERENCE</th>
@@ -342,38 +480,47 @@ function Dashbord() {
                                         <th className="table_header_text">NAME</th>
                                         <th className="table_header_text">EMAIL ADDRESS</th>
                                         <th className="table_header_text">STATUS</th>
-                                        <th className="table_header_text">TICKET COUNT</th>
+                                        {/* <th className="table_header_text">TICKET COUNT</th> */}
                                         <th className="table_header_text">PAID AMOUNT</th>
-                                        <th className="table_header_text">PAYMENT TYPE</th>
+                                        {/* <th className="table_header_text">PAYMENT TYPE</th> */}
                                         <th></th>
-
                                     </tr>
                                 </thead>
                                 <tbody className="inventory" style={{ backgroundColor: "#F9FAFB" }}>
-                                    <tr style={{ borderTop: 'hidden' }} className='td_tr'>
-                                        {/* <td className="inventory_td">D657688</td>
-                                        <td className="inventory_td">12 Jan 2025 10.00 Am</td>
-                                        <td className="inventory_td">GGHjf</td>
-                                        <td className="inventory_td">John@gmail.com</td>
-                                        <td className="inventory_td">Refund</td>
-                                        <td className="inventory_td">1</td>
-                                        <td className="inventory_td">5000 lkr</td>
-                                        <td className="inventory_td">Card</td>
-                                        <td>
-                                            <div className="row">
-                                                <div className="col d-flex  align-items-center">
-                                                    <div className="check_in">Check in</div>
-                                                    <div onClick={() => { handleOpenOffCanvasCatCreate() }} className="check_icon"><IoEyeOutline /></div>
-
-                                                </div>
-                                            </div>
-                                        </td> */}
-                                          <td className="coomin_zoon" colSpan={8} style={{ textAlign: "center" }}>Commin zoon</td>
-                                    </tr>
-                                   
-                                    
+                                    {/* Safe check for data being an array */}
+                                    {Array.isArray(participants) && participants.length > 0 ? (
+                                        participants.map((item, index) => (
+                                            <tr key={index} style={{ borderTop: 'hidden' }} className='td_tr'>
+                                                <td className="inventory_td">{item.transaction_reference}</td>
+                                                <td className="inventory_td">{new Date(item.datetime).toLocaleString()}</td>
+                                                <td className="inventory_td">{item.customer_name}</td>
+                                                <td className="inventory_td">{item.customer_email}</td>
+                                                <td className="inventory_td">{item.is_refund ? "Refund" : "Paid"}</td>
+                                                {/* <td className="inventory_td">1</td>  */}
+                                                <td className="inventory_td">{item.total_amount} LKR</td>
+                                                {/* <td className="inventory_td">Card</td>  */}
+                                                {/* <td>
+                                                    <div className="row">
+                                                        <div className="col d-flex align-items-center">
+                                                            <div className="check_in">Check in</div>
+                                                            <div onClick={() => { handleOpenOffCanvasCatCreate() }} className="check_icon"><IoEyeOutline /></div>
+                                                        </div>
+                                                    </div>
+                                                </td> */}
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={9} style={{ textAlign: "center", padding: "20px" }}>
+                                                No data available
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
+
+
+
                         </div>
 
                     </div>

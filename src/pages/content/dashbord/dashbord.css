@@ -245,4 +245,40 @@ text-transform: capitalize;
   padding-bottom: 3rem!important;
 }
 
+.logout{
+  border: none;
+  font-size: 10px;
+  color: white;
+  background-color: green;
+  border-radius: 8px;
+  margin-top: -19px;
+}
+.event_name {
+  display: flex;
+  align-items: center;  /* Aligns the text and the form in the same row */
+}
+
+.sub_name {
+  margin-left: 2px;  /* Adds some space between the title and the form */
+}
+
+.select_ {
+  margin-left: 10px;  /* Space between the select dropdown and the title */
+  padding: 1px;  /* Adjust padding for better appearance */
+  width: 50%;
+  color: #00900A;
+  font-size: 14px;
+}
+.sold-out {
+  color: #D32F2F; /* Red */
+  font-weight: bold;
+}
+
+.available {
+  color: #388E3C; /* Green */
+  font-weight: bold;
+}
+
+
+
   
