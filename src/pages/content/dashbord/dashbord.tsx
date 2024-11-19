@@ -25,15 +25,23 @@ interface Ticket {
     ticket_description: string;
     is_free_ticket: number;
 }
+interface Participant {
+    customer_email: string;
+    customer_name: string;
+    is_refund: boolean;
+    [key: string]: any; // Add this if there are other unknown fields
+}
 
 const ticketsData: Ticket[] = [];
 function Dashbord() {
-
+    const [searchQuery, setSearchQuery] = useState('');
+    const [partData, setPartData] = useState<Participant[]>([]);
+    const [filteredData, setFilteredData] = useState<Participant[]>([]);
     const navigate = useNavigate();
     const [event, setData] = useState<any>();
     const [defaultEventId, setDefaultEventId] = useState("")
     const [eventData, setEventData] = useState<any>(null);
-    const [participants, setPartData] = useState<any>(null);
+    // const [participants, setPartData] = useState<any>(null);
     const [volume, setVolume] = useState<any>(null);
 
     const [data, setEventDetails] = useState<any>(null);
@@ -60,20 +68,20 @@ function Dashbord() {
 
         console.log("Reimbursement data", data.data.data);
         setData(data.data.data);
-         setDefaultEventId(data.data.data[0].event_details);
-         fetchData(data.data.data[0].event_details);
-         getDataParticipants(data.data.data[0].event_details)
-         getVolume(data.data.data[0].event_details)
+        setDefaultEventId(data.data.data[0].event_details);
+        fetchData(data.data.data[0].event_details);
+        getDataParticipants(data.data.data[0].event_details)
+        getVolume(data.data.data[0].event_details)
 
     };
     const newEvent = async (id) => {
         // const data = await getALLevent();
 
-        
-         setDefaultEventId(id);
-    
-         getDataParticipants(id)
-         getVolume(id)
+
+        setDefaultEventId(id);
+
+        getDataParticipants(id)
+        getVolume(id)
 
     };
 
@@ -93,15 +101,16 @@ function Dashbord() {
         return formattedDate;
     };
     const fetchData = async (eventId) => {
-        
+
         if (!eventId) return; // Make sure the eventId is available before fetching
         const data = await getEventDetails(eventId);
         if (data.data?.status === 100) {
             newEvent(eventId)
-            console.log(data.data.data, 'rroof')
+           
             setEventData(data.data.data);
             setEventDetails(data.data.data.tickets);
-            
+            console.log(data.data.data.tickets, 'rroofcc')
+
         } else {
             console.error(data.message || 'Getting events failed!');
             toast.error('Getting events failed!', { id: 'getEvents' });
@@ -110,19 +119,39 @@ function Dashbord() {
     };
 
 
+    // const getDataParticipants = async (eventId) => {
+    //     if (!eventId) return; // Make sure the eventId is available before fetching
+    //     const data = await getPartiDetails(eventId);
+    //     if (data.data?.status === 100) {
+    //         console.log(data.data.data, 'participant')
+    //         setPartData(data.data.data);
+    //     } else {
+    //         console.error(data.message || 'Getting events failed!');
+    //         toast.error('Getting events failed!', { id: 'getEvents' });
+    //     }
+    //     console.log("detailss", data.data.data);
+
+    // };
     const getDataParticipants = async (eventId) => {
-        if (!eventId) return; // Make sure the eventId is available before fetching
+        if (!eventId) return;
         const data = await getPartiDetails(eventId);
         if (data.data?.status === 100) {
-            console.log(data.data.data, 'participant')
             setPartData(data.data.data);
         } else {
             console.error(data.message || 'Getting events failed!');
-            toast.error('Getting events failed!', { id: 'getEvents' });
         }
-        console.log("detailss", data.data.data);
-
     };
+    useEffect(() => {
+        if (searchQuery.trim() === '') {
+            setFilteredData(partData); // If no query, show all data
+        } else {
+            const filtered = partData.filter((item) =>
+                item.customer_email.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredData(filtered);
+            console.log(filtered, 'filtwe data')
+        }
+    }, [searchQuery, partData]);
     const getVolume = async (eventId) => {
         if (!eventId) return; // Make sure the eventId is available before fetching
         const data = await geteventVolume(eventId);
@@ -152,9 +181,9 @@ function Dashbord() {
 
 
 
-    
+
     const parseTicketValue = (value: string): number => {
-        return parseInt(value, 10) || 0; 
+        return parseInt(value, 10) || 0;
     };
     const totalTicketsSold = data.reduce((acc, ticket) => {
         return acc + (parseInt(ticket.total_tickets, 10) - parseInt(ticket.remaining_tickets, 10));
@@ -223,7 +252,7 @@ function Dashbord() {
                                     </p> */}
 
 
-                                    <p className='dh-sub-description2 mt-3'>Total Ticket Sale (Net Amount)</p>
+                                    <p className='dh-sub-description2 mt-3'>Total Ticket Sale</p>
                                 </div>
                             </div>
                         </div>
@@ -335,7 +364,7 @@ function Dashbord() {
 
                                         </div>
                                     </div> */}
-                                   
+
                                     {/* <div className='col-20'>
                                         <div className="section_d">
                                             <p className="dh_data_head event_ticket_name">Status</p>
@@ -360,14 +389,14 @@ function Dashbord() {
                                                         <p className="dh_data">{ticket.total_tickets}</p>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className='col-20'>
                                                     <div className="section_d">
 
                                                         <p className="dh_data">{ticket.remaining_tickets}</p>
                                                     </div>
                                                 </div>
-                                                
+
                                                 {/* <div className='col-20'>
                                                     <div className="section_d">
 
@@ -406,7 +435,7 @@ function Dashbord() {
 
                                                     </div>
                                                 </div> */}
-                                                
+
                                             </div>
                                             <div className='line_summary_table mt-3 mb-3'></div>
                                         </React.Fragment>
@@ -459,19 +488,29 @@ function Dashbord() {
                     <div className="col d-flex justify-content-between align-items-center">
                         <h3 className="event_name_sub mb-4 mt-4">Participants List</h3>
 
-                        {/* <div className="d-flex justify-content-end align-items-center">
+                        <div className="d-flex justify-content-end align-items-center">
                             <span style={{ color: '#8E00AB', fontSize: 'large' }}><CgSoftwareDownload /><span style={{ fontSize: '14px', color: '#8E00AB', marginLeft: '3px', fontWeight: '500', marginRight: '10px' }}>Download Reports</span></span>
 
-                            <div className="input-with-icon">
+                            {/* <div className="input-with-icon">
                                 <IoSearchOutline className="search-icon" />
                                 <input
                                     type="text"
                                     className="search-input"
                                     placeholder="Search"
                                 />
+                            </div> */}
+                            <div className="input-with-icon">
+                                <IoSearchOutline className="search-icon" />
+                                <input
+                                    type="text"
+                                    className="search-input"
+                                    placeholder="Search by Email"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
                             </div>
 
-                        </div> */}
+                        </div>
                     </div>
                 </div>
                 <div className='table_data_grid'>
@@ -493,26 +532,31 @@ function Dashbord() {
                                     </tr>
                                 </thead>
                                 <tbody className="inventory" style={{ backgroundColor: "#F9FAFB" }}>
-                                    {/* Safe check for data being an array */}
-                                    {Array.isArray(participants) && participants.length > 0 ? (
-                                        participants.map((item, index) => (
+
+                                    {filteredData.length > 0 ? (
+                                        filteredData.map((item, index) => (
                                             <tr key={index} style={{ borderTop: 'hidden' }} className='td_tr'>
                                                 <td className="inventory_td">{item.transaction_reference}</td>
                                                 <td className="inventory_td">{new Date(item.datetime).toLocaleString()}</td>
                                                 <td className="inventory_td">{item.customer_name}</td>
                                                 <td className="inventory_td">{item.customer_email}</td>
                                                 <td className="inventory_td">{item.is_refund ? "Refund" : "Paid"}</td>
-                                                {/* <td className="inventory_td">1</td>  */}
                                                 <td className="inventory_td">{item.total_amount} LKR</td>
-                                                {/* <td className="inventory_td">Card</td>  */}
-                                                {/* <td>
+
+                                                <td>
                                                     <div className="row">
                                                         <div className="col d-flex align-items-center">
-                                                            <div className="check_in">Check in</div>
-                                                            <div onClick={() => { handleOpenOffCanvasCatCreate() }} className="check_icon"><IoEyeOutline /></div>
+                                                            <div
+                                                                className="check_in"
+                                                                style={{ color: item.is_checked_in ? "#28a745" : "#dc3545" }}
+                                                            >
+                                                                {item.is_checked_in ? "Check in" : "Check in pending"}
+                                                            </div>
+
+                                                            {/* <div onClick={() => { handleOpenOffCanvasCatCreate() }} className="check_icon"><IoEyeOutline /></div> */}
                                                         </div>
                                                     </div>
-                                                </td> */}
+                                                </td>
                                             </tr>
                                         ))
                                     ) : (
