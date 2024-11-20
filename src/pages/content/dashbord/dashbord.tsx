@@ -12,8 +12,9 @@ import { environment } from '../../../environment/enviroment.js';
 import toast from 'react-hot-toast';
 import { deleteToken } from "../../../_auth/auth.js";
 import { useNavigate } from "react-router-dom";
-import { getALLevent, getEventDetails, getPartiDetails, geteventVolume } from "../../../_services/dashboard.js";
+import { getALLevent, getEventDetails, getPartiDetails, geteventVolume,getDetailsById } from "../../../_services/dashboard.js";
 import { Formik, Form, Field } from 'formik';
+import Pagination from "../../../components/pagination/pagination.tsx";
 
 interface Ticket {
     id: number;
@@ -34,6 +35,12 @@ interface Participant {
 
 const ticketsData: Ticket[] = [];
 function Dashbord() {
+    var filterParams: any = {}
+    const [dataCount, setDataCount] = useState(0);
+    var tablePageIndex = 1
+    const [currentPage, setCurrentPage] = useState(tablePageIndex);
+    const [itemsPerPage, setIemsPerPage] = useState(10);
+
     const [searchQuery, setSearchQuery] = useState('');
     const [partData, setPartData] = useState<Participant[]>([]);
     const [filteredData, setFilteredData] = useState<Participant[]>([]);
@@ -41,15 +48,55 @@ function Dashbord() {
     const [event, setData] = useState<any>();
     const [defaultEventId, setDefaultEventId] = useState("")
     const [eventData, setEventData] = useState<any>(null);
-    // const [participants, setPartData] = useState<any>(null);
+    const [eventId, setId] = useState(defaultEventId)
     const [volume, setVolume] = useState<any>(null);
-
     const [data, setEventDetails] = useState<any>(null);
+    const [modalData, setModalData] = useState(null);
     const [isCategoryCreateOffCanvasOpen, setIsCategoryCreateOffCanvasOpen] = useState(false);
-    const handleOpenOffCanvasCatCreate = () => {
-        setIsCategoryCreateOffCanvasOpen(true);
 
+    const handlePageChange = async (pageNumber: any) => {
+        await setCurrentPage(pageNumber);
+        tablePageIndex = pageNumber
+        getDataParticipants()
     };
+    function jsonToUrlParams(json: any) {
+        const params = new URLSearchParams();
+        for (const key in json) {
+            if (json.hasOwnProperty(key)) {
+                params.append(key, json[key]);
+            }
+        }
+        return params.toString();
+    }
+    // const handleOpenOffCanvasCatCreate = () => {
+    //     setIsCategoryCreateOffCanvasOpen(true);
+
+    // };
+    const handleOpenOffCanvasCatCreate = async (id2) => {
+        if (!id2) return; // Ensure id is available
+    
+        try {
+            console.log('Fetching details for ID:', id2);
+            
+            let params = {
+                event_id: eventId,
+                transaction_id:id2
+            };
+            const response = await getDetailsById(jsonToUrlParams(params));
+            if (response?.data?.status === 200) {
+                console.log('Data:', response.data.data);
+                setModalData(response.data.data);
+                setIsCategoryCreateOffCanvasOpen(true);
+            } else {
+                console.error('Error:', response?.data?.message || 'Failed to fetch details');
+                toast.error(response?.data?.message || 'An error occurred.');
+            }
+        } catch (error) {
+            console.error('Error fetching details:', error);
+            toast.error('An unexpected error occurred.');
+        }
+    };
+    
     const handleCloseOffCanvasCatCreate = () => {
         setIsCategoryCreateOffCanvasOpen(false);
 
@@ -57,12 +104,7 @@ function Dashbord() {
     const loadDataCreateCat = async (data: any) => {
 
     };
-    const handleLogout = () => {
-        // Delete the token or perform any other necessary logout tasks
-        deleteToken();
-        // Navigate to the login page
-        navigate(`/sign`);
-    };
+   
     const getData = async () => {
         const data = await getALLevent();
 
@@ -70,17 +112,16 @@ function Dashbord() {
         setData(data.data.data);
         setDefaultEventId(data.data.data[0].event_details);
         fetchData(data.data.data[0].event_details);
-        getDataParticipants(data.data.data[0].event_details)
+        getDataParticipants()
         getVolume(data.data.data[0].event_details)
 
     };
     const newEvent = async (id) => {
         // const data = await getALLevent();
 
-
         setDefaultEventId(id);
 
-        getDataParticipants(id)
+        getDataParticipants()
         getVolume(id)
 
     };
@@ -106,6 +147,7 @@ function Dashbord() {
         const data = await getEventDetails(eventId);
         if (data.data?.status === 100) {
             newEvent(eventId)
+            setId(eventId)
            
             setEventData(data.data.data);
             setEventDetails(data.data.data.tickets);
@@ -118,32 +160,46 @@ function Dashbord() {
         console.log("detailss", data.data.data);
     };
 
-
-    // const getDataParticipants = async (eventId) => {
-    //     if (!eventId) return; // Make sure the eventId is available before fetching
-    //     const data = await getPartiDetails(eventId);
-    //     if (data.data?.status === 100) {
-    //         console.log(data.data.data, 'participant')
-    //         setPartData(data.data.data);
-    //     } else {
-    //         console.error(data.message || 'Getting events failed!');
-    //         toast.error('Getting events failed!', { id: 'getEvents' });
-    //     }
-    //     console.log("detailss", data.data.data);
-
-    // };
-    const getDataParticipants = async (eventId) => {
+    const getDataParticipants = async () => {
         if (!eventId) return;
-        const data = await getPartiDetails(eventId);
-        if (data.data?.status === 100) {
-            setPartData(data.data.data);
-        } else {
-            console.error(data.message || 'Getting events failed!');
+
+        try {
+            let params = {
+                page: tablePageIndex || 1,
+                limit: itemsPerPage || 10,
+                id: eventId,
+                search_text: searchQuery.trim(), // Add search query to params
+                ...filterParams,
+            };
+
+            const data = await getPartiDetails(jsonToUrlParams(params));
+
+            if (data?.data?.status === 200) {
+                setPartData(data.data.data);
+                setDataCount(data.data["count"] || 0);
+                console.log(data.data["count"], 'Participant count');
+            } else {
+                console.error(data?.data?.message || 'Getting participants failed!');
+                toast.error(data?.data?.message || 'Failed to fetch participants!');
+            }
+        } catch (error) {
+            console.error('Error fetching participants:', error);
+            toast.error('An error occurred while fetching participants.');
         }
     };
+
+    // Debounce search query
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            getDataParticipants();
+        }, 500); // Adjust debounce delay (in ms) as needed
+
+        return () => clearTimeout(delayDebounce);
+    }, [searchQuery, tablePageIndex, eventId]);
+
     useEffect(() => {
         if (searchQuery.trim() === '') {
-            setFilteredData(partData); // If no query, show all data
+            setFilteredData(partData); 
         } else {
             const filtered = partData.filter((item) =>
                 item.customer_email.toLowerCase().includes(searchQuery.toLowerCase())
@@ -152,6 +208,7 @@ function Dashbord() {
             console.log(filtered, 'filtwe data')
         }
     }, [searchQuery, partData]);
+    
     const getVolume = async (eventId) => {
         if (!eventId) return; // Make sure the eventId is available before fetching
         const data = await geteventVolume(eventId);
@@ -176,12 +233,6 @@ function Dashbord() {
             height: '80vh'
         }}>Loading...</p>;
     }
-
-
-
-
-
-
     const parseTicketValue = (value: string): number => {
         return parseInt(value, 10) || 0;
     };
@@ -553,7 +604,7 @@ function Dashbord() {
                                                                 {item.is_checked_in ? "Check in" : "Check in pending"}
                                                             </div>
 
-                                                            {/* <div onClick={() => { handleOpenOffCanvasCatCreate() }} className="check_icon"><IoEyeOutline /></div> */}
+                                                            <div onClick={() => { handleOpenOffCanvasCatCreate(item.id) }} className="check_icon"><IoEyeOutline /></div>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -574,12 +625,19 @@ function Dashbord() {
                         </div>
 
                     </div>
+                    <Pagination itemsPerPage={itemsPerPage} count={dataCount} currentPage={currentPage} onPageChange={handlePageChange} />
 
                 </div>
 
 
             </div>
-            {isCategoryCreateOffCanvasOpen && <CreateCategory headline="test" onClose={handleCloseOffCanvasCatCreate} onSubmitForm={loadDataCreateCat} />}
+            {isCategoryCreateOffCanvasOpen && 
+            <CreateCategory 
+            headline="test" 
+            onClose={handleCloseOffCanvasCatCreate} 
+            viewData={modalData}
+            
+            />}
         </div>
 
     );

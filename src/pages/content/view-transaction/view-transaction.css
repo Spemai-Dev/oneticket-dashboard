@@ -34,6 +34,7 @@
 
 
 
+
 .button_apply,
 .button_apply_close {
     margin-left: 10px;
@@ -84,4 +85,8 @@
 .canvas_sub_title{
 font-size: 18px;
 font-weight: 600;
+}
+.tittle2{
+    font-size: 24px;
+    font-weight: 600;  
 }

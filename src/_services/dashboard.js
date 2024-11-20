@@ -22,15 +22,21 @@ export const getEventDetails = async (eventId) => {
       return error;
     }
 }
-export const getPartiDetails = async (eventId) => {
-    try {
-      const data = await get(`organization/dashboard/event-participants/?id=${eventId}`);
-      return data;
-      // Process the received data
-    } catch (error) {
-      // Handle error here
-      return error;
-    }
+// export const getPartiDetails = async (eventId) => {
+//     try {
+//       const data = await get(`organization/dashboard/event-participants/?id=${eventId}`);
+//       return data;
+//       // Process the received data
+//     } catch (error) {
+//       // Handle error here
+//       return error;
+//     }
+// }
+export const getPartiDetails =async(params)=>{
+  return await get("organization/dashboard/event-participants/?" + params)
+}
+export const getDetailsById =async(params)=>{
+  return await get("organization/dashboard/event-participant-detail/?" + params)
 }
 export const geteventVolume = async (eventId) => {
     try {

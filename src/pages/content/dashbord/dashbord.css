@@ -212,6 +212,7 @@ text-transform: capitalize;
     font-size: 12px;
     color: #00900A;
     font-weight: 500;
+    width: 100px;
   }
   .check_icon{
     background-color: #FFEEB8;

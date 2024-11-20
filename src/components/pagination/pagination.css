@@ -1,0 +1,25 @@
+.left_p,.center_p,.right_p{
+    font-size: 14px;
+    font-weight: 500;
+    color: #344054;
+}
+.left_p,.right_p{
+    border: 1px solid #D0D5DD;
+    padding: 8px 14px;
+    border-radius: 8px;
+  
+}
+.right_p{
+    float: right;
+}
+.center_p{
+    text-align: center;
+    border: none;
+    padding: 8px 14px;
+}
+.left_p{
+    float: left;
+}
+.page_c{
+    text-align: center;
+}
