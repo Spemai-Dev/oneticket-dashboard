@@ -12,7 +12,7 @@ import { environment } from '../../../environment/enviroment.js';
 import toast from 'react-hot-toast';
 import { deleteToken } from "../../../_auth/auth.js";
 import { useNavigate } from "react-router-dom";
-import { getALLevent, getEventDetails, getPartiDetails, geteventVolume,getDetailsById } from "../../../_services/dashboard.js";
+import { getALLevent, getEventDetails, getPartiDetails, geteventVolume, getDetailsById, getEventS } from "../../../_services/dashboard.js";
 import { Formik, Form, Field } from 'formik';
 import Pagination from "../../../components/pagination/pagination.tsx";
 
@@ -46,6 +46,7 @@ function Dashbord() {
     const [filteredData, setFilteredData] = useState<Participant[]>([]);
     const navigate = useNavigate();
     const [event, setData] = useState<any>();
+    const [tStatus, setTicketStatus] = useState<any>();
     const [defaultEventId, setDefaultEventId] = useState("")
     const [eventData, setEventData] = useState<any>(null);
     const [eventId, setId] = useState(defaultEventId)
@@ -74,13 +75,13 @@ function Dashbord() {
     // };
     const handleOpenOffCanvasCatCreate = async (id2) => {
         if (!id2) return; // Ensure id is available
-    
+
         try {
             console.log('Fetching details for ID:', id2);
-            
+
             let params = {
                 event_id: eventId,
-                transaction_id:id2
+                transaction_id: id2
             };
             const response = await getDetailsById(jsonToUrlParams(params));
             if (response?.data?.status === 200) {
@@ -96,7 +97,7 @@ function Dashbord() {
             toast.error('An unexpected error occurred.');
         }
     };
-    
+
     const handleCloseOffCanvasCatCreate = () => {
         setIsCategoryCreateOffCanvasOpen(false);
 
@@ -104,7 +105,7 @@ function Dashbord() {
     const loadDataCreateCat = async (data: any) => {
 
     };
-   
+
     const getData = async () => {
         const data = await getALLevent();
 
@@ -120,9 +121,10 @@ function Dashbord() {
         // const data = await getALLevent();
 
         setDefaultEventId(id);
-
+        getEventStatus()
         getDataParticipants()
         getVolume(id)
+
 
     };
 
@@ -148,7 +150,7 @@ function Dashbord() {
         if (data.data?.status === 100) {
             newEvent(eventId)
             setId(eventId)
-           
+
             setEventData(data.data.data);
             setEventDetails(data.data.data.tickets);
             console.log(data.data.data.tickets, 'rroofcc')
@@ -187,6 +189,27 @@ function Dashbord() {
             toast.error('An error occurred while fetching participants.');
         }
     };
+    const getEventStatus = async () => {
+        if (!eventId) return;
+
+        try {
+            let params = {
+                event_id: eventId,
+            };
+            const data = await getEventS(jsonToUrlParams(params));
+
+            if (data?.data?.status === 100) {
+                setTicketStatus(data.data.data);
+                console.log(data.data.data, 'status');
+            } else {
+
+                toast.error(data?.data?.message || 'Failed to fetch participants!');
+            }
+        } catch (error) {
+            console.error('Error fetching participants:', error);
+            toast.error('An error occurred while fetching participants.');
+        }
+    };
 
     // Debounce search query
     useEffect(() => {
@@ -199,7 +222,7 @@ function Dashbord() {
 
     useEffect(() => {
         if (searchQuery.trim() === '') {
-            setFilteredData(partData); 
+            setFilteredData(partData);
         } else {
             const filtered = partData.filter((item) =>
                 item.customer_email.toLowerCase().includes(searchQuery.toLowerCase())
@@ -208,7 +231,7 @@ function Dashbord() {
             console.log(filtered, 'filtwe data')
         }
     }, [searchQuery, partData]);
-    
+
     const getVolume = async (eventId) => {
         if (!eventId) return; // Make sure the eventId is available before fetching
         const data = await geteventVolume(eventId);
@@ -243,6 +266,9 @@ function Dashbord() {
     const totalSalesAmount = data.reduce((acc, ticket) => {
         return acc + (parseInt(ticket.total_tickets, 10) - parseInt(ticket.remaining_tickets, 10)) * parseFloat(ticket.ticket_amount);
     }, 0);
+
+    //    get status
+
 
 
 
@@ -499,15 +525,25 @@ function Dashbord() {
                         </div>
                         <div className='col-sm-12 col-md-8 col-lg-5' style={{ display: 'flex', flexDirection: 'column' }}>
                             {hasTickets ? (
-                                <div className='row borderRow_bottom' style={{ flexGrow: 1 }}>
-                                    {data.map(ticket => (
-                                        <div key={ticket.id} className='col-4 borderCol_right box_grid '>
-                                            <p className='box_name'>{ticket.ticket_name}</p>
-                                            <h4 className='box_data_1'>{parseTicketValue(ticket.remaining_tickets)}<span className='box_data_2'>/{parseTicketValue(ticket.total_tickets)}</span></h4>
-                                        </div>
-
-                                    ))}
+                                <div className="row borderRow_bottom" style={{ flexGrow: 1 }}>
+                                    {tStatus && tStatus.length > 0 ? (
+                                        tStatus.map((ticket) => (
+                                            <div key={ticket.id} className="col-4 borderCol_right box_grid">
+                                                <p className="box_name">{ticket.name}</p>
+                                                <h4 className="box_data_1">
+                                                    {parseTicketValue(ticket.purchased_ticket_count)}
+                                                    <span className="box_data_2">
+                                                        /{parseTicketValue(ticket.checked_in_ticket_count)}
+                                                    </span>
+                                                </h4>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No tickets available</p>
+                                    )}
                                 </div>
+
+
 
                             ) : (
                                 <div className='row borderRow_bottom' style={{ flexGrow: 1 }}>
@@ -631,13 +667,13 @@ function Dashbord() {
 
 
             </div>
-            {isCategoryCreateOffCanvasOpen && 
-            <CreateCategory 
-            headline="test" 
-            onClose={handleCloseOffCanvasCatCreate} 
-            viewData={modalData}
-            
-            />}
+            {isCategoryCreateOffCanvasOpen &&
+                <CreateCategory
+                    headline="test"
+                    onClose={handleCloseOffCanvasCatCreate}
+                    viewData={modalData}
+
+                />}
         </div>
 
     );

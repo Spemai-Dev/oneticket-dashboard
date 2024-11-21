@@ -38,6 +38,9 @@ export const getPartiDetails =async(params)=>{
 export const getDetailsById =async(params)=>{
   return await get("organization/dashboard/event-participant-detail/?" + params)
 }
+export const getEventS =async(params)=>{
+  return await get("organization/dashboard/event-checking-status/?" + params)
+}
 export const geteventVolume = async (eventId) => {
     try {
       const data = await get(`organization/dashboard/event-volume/?id=${eventId}`);
