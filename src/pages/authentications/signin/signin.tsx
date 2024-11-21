@@ -4,12 +4,12 @@ import './sign.css';
 // import thumbnail from '../../../../assets/thumbnail.png';
 // import card from '../../../../assets/Card.png';
 // import man from '../../../../assets/man.png';
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { Formik, useFormik, Form, Field, ErrorMessage } from 'formik';
 import toast, { Toaster } from 'react-hot-toast';
-import { useLocation, useSearchParams, Navigate, useNavigate ,useParams} from 'react-router-dom';
+import { useLocation, useSearchParams, Navigate, useNavigate, useParams } from 'react-router-dom';
 // import spemaiLogo from '../../../../assets/spemaiLogo.png';
 import { sign } from '../../../_services/dashboard';
 
@@ -22,7 +22,7 @@ import { sign } from '../../../_services/dashboard';
 interface FormValues {
     email: string;
     password: string;
- 
+
 }
 const saveDataToLocalStorage = (data: string) => {
     return new Promise<void>((resolve, reject) => {
@@ -68,7 +68,7 @@ function SigninPage() {
         initialValues: {
             email: '',
             password: '',
-           
+
         },
         onSubmit: (values, { setSubmitting }) => {
             handleSubmit(values, setSubmitting);
@@ -89,16 +89,58 @@ function SigninPage() {
 
             return errors;
         },
-        
+
     });
+    // const handleSubmit = async (data: any, setSubmitting: any) => {
+    //     setSubmitting(true);
+      
+    //     try {
+    //       const response = await sign(data); // Call the API
+    //       const dataPost = response;
+    //       console.log(dataPost,'dataPostdataPostdataPost')
+      
+    //       if (dataPost.status === 100) {
+           
+    //         saveDataToLocalStorage(dataPost.data?.access);
+    //         localStorage.setItem("token", dataPost.data.access);
+    //         toast.success("Login successful! 🎉");
+    //         navigate(`/`);
+    //       } else {
+            
+    //         toast.error(dataPost.message || "Login failed. Please check your credentials.");
+    //       }
+    //     } catch (error: any) {
+         
+    //       if (error.response) {
+    //         const { status, data } = error.response;
+      
+    //         if (status === 401) {
+             
+    //           toast.error("Invalid credentials. Please try again.");
+    //         } else {
+              
+    //           toast.error(data?.message || "An unexpected error occurred. Please try again.");
+    //         }
+    //       } else {
+           
+    //         console.error("Unexpected error:", error);
+    //         toast.error("Something went wrong. Please try again.");
+    //       }
+    //     } finally {
+    //       setSubmitting(false);
+    //       toast.error("Something went wrong. Please try again.");
+    //     }
+    //   };
+      
+      
+
+
     const handleSubmit = async (data: any, setSubmitting: any) => {
-        // navigate('/dashbord')
+        setSubmitting(true);
+      
 
         const params = data.email;
-        // console.log(data, 'form data')
-        // let param2 = params
-        // console.log(param2,'encriptttt param')
-
+      
         try {
             const response = await sign(data);
             const dataPost = await response;
@@ -109,7 +151,7 @@ function SigninPage() {
                 saveDataToLocalStorage(dataPost.data?.access)
                 toast.success("Success");
                 navigate(`/`)
-              
+
             } else {
                 setSubmitting(false);
                 toast.error(dataPost.message)
@@ -118,15 +160,16 @@ function SigninPage() {
         } catch (error) {
             console.error("Error:", error);
             setSubmitting(false);
+            toast.success("Fail");
         }
 
 
     };
     useEffect(() => {
-      
+
 
     }, []);
-   
+
 
     return (
         <div className="login-root container-fluid">
@@ -164,14 +207,14 @@ function SigninPage() {
 
                 </div>
                 <div className='col-sm-12 col-md-6 col-lg-6 right-side'>
-                <div className='row mb-5'>
+                    <div className='row mb-5'>
                         <div className='col-12'>
                             {/* <img style={{ width: '160px', height: 'auto' }} className='img' src={spemaiLogo} /> */}
                         </div>
                     </div>
-                    <h3 className='title-signin'>Login</h3>
+                    <h3 className='title-signin'>OneTicket</h3>
                     <p className='title-sub mb-5'>Sign in to your OneTicket account</p>
-                   
+
                     <form onSubmit={formik.handleSubmit} >
 
                         <div className="row">
@@ -184,7 +227,7 @@ function SigninPage() {
                                     placeholder="olivia@spemai.com "
                                     name="email"
                                     value={formik.values.email}
-                                    // className={inputClassName}
+                                // className={inputClassName}
                                 />
                                 <div className='mb-2'>
                                     {formik.errors.email && formik.touched.email && (
@@ -210,21 +253,33 @@ function SigninPage() {
                                         // value={passwordInput}
                                         value={formik.values.password}
                                     />
-                                       <span onClick={togglePassword} className="input-icon"> {passwordType === "password" ? <FiEye /> : <FiEyeOff />}</span>
-                                   
+                                    <span onClick={togglePassword} className="input-icon"> {passwordType === "password" ? <FiEye /> : <FiEyeOff />}</span>
+
                                 </div>
                                 <div >
-                                        {formik.errors.password && formik.touched.password && (
-                                            <div className="error">{formik.errors.password}</div>
-                                        )}
+                                    {formik.errors.password && formik.touched.password && (
+                                        <div className="error">{formik.errors.password}</div>
+                                    )}
 
-                                    </div>
+                                </div>
                             </div>
 
                         </div>
-                        <button disabled={formik.isSubmitting} className="_button mt-4 mb-5" type="submit">
-                        Signin
+                        {/* <button disabled={formik.isSubmitting} className="_button mt-4 mb-5" type="submit">
+                        Login
+                        </button> */}
+                        <button
+                            disabled={formik.isSubmitting}
+                            className="_button mt-4 mb-5"
+                            type="submit"
+                        >
+                            {formik.isSubmitting ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : (
+                                'Login'
+                            )}
                         </button>
+
                     </form>
 
                     <div className='row mb-4 mt-4'>
