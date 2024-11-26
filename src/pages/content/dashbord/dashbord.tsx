@@ -220,17 +220,48 @@ function Dashbord() {
         return () => clearTimeout(delayDebounce);
     }, [searchQuery, tablePageIndex, eventId]);
 
+
+    // useEffect(() => {
+    //     if (searchQuery.trim() === '') {
+    //         setFilteredData(partData);
+    //     } else {
+    //         const filtered = partData.filter((item) =>
+    //             item.transaction_reference.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    //             item.datetime.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    //             item.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    //             item.customer_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    //             item.total_amount.includes(searchQuery) // No need for `.toLowerCase()` as it's numeric-like
+    //         );
+    //         setFilteredData(filtered);
+    //         console.log(filtered, 'filtered data');
+    //     }
+    // }, [searchQuery, partData]);
     useEffect(() => {
-        if (searchQuery.trim() === '') {
-            setFilteredData(partData);
+        const trimmedQuery = searchQuery.trim().toLowerCase(); // Trim and lowercase query once
+
+        if (trimmedQuery === '') {
+            setFilteredData(partData); // Reset to full data if query is empty
         } else {
-            const filtered = partData.filter((item) =>
-                item.customer_email.toLowerCase().includes(searchQuery.toLowerCase())
-            );
-            setFilteredData(filtered);
-            console.log(filtered, 'filtwe data')
+            const filtered = partData.filter((item) => {
+                // Safely check each property
+                const matchesTransaction = item.transaction_reference?.toLowerCase().includes(trimmedQuery);
+                const matchesDatetime = item.datetime?.toLowerCase().includes(trimmedQuery);
+                const matchesName = item.customer_name?.toLowerCase().includes(trimmedQuery);
+                const matchesEmail = item.customer_email?.toLowerCase().includes(trimmedQuery);
+                const matchesAmount = item.total_amount?.toString().includes(trimmedQuery);
+
+                // Return true if any of the conditions match
+                return matchesTransaction || matchesDatetime || matchesName || matchesEmail || matchesAmount;
+            });
+
+            setFilteredData(filtered); // Update filtered data
+            console.log(filtered, 'filtered data');
         }
     }, [searchQuery, partData]);
+
+
+
+
 
     const getVolume = async (eventId) => {
         if (!eventId) return; // Make sure the eventId is available before fetching
@@ -383,8 +414,9 @@ function Dashbord() {
                                     <img
                                         style={{
                                             width: '100%',
-                                            height: '100%',
-                                            objectFit: 'cover'
+                                             height: 'auto',
+                                            // height: '100%',
+                                            // objectFit: 'cover'
                                         }}
                                         className='img'
                                         src={`${environment.aws}${eventData.event_banner}`}
@@ -619,8 +651,7 @@ function Dashbord() {
                                     </tr>
                                 </thead>
                                 <tbody className="inventory" style={{ backgroundColor: "#F9FAFB" }}>
-
-                                    {filteredData.length > 0 ? (
+                                    {dataCount > 0 ? (
                                         filteredData.map((item, index) => (
                                             <tr key={index} style={{ borderTop: 'hidden' }} className='td_tr'>
                                                 <td className="inventory_td">{item.transaction_reference}</td>
@@ -656,12 +687,17 @@ function Dashbord() {
                                 </tbody>
                             </table>
 
-
-
                         </div>
 
                     </div>
-                    <Pagination itemsPerPage={itemsPerPage} count={dataCount} currentPage={currentPage} onPageChange={handlePageChange} />
+                    {dataCount > 0 || currentPage > 1 ? (
+                        <Pagination
+                            itemsPerPage={itemsPerPage}
+                            count={dataCount}
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
+                        />
+                    ) : null}
 
                 </div>
 

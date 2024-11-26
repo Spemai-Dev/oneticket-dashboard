@@ -12,13 +12,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useLocation, useSearchParams, Navigate, useNavigate, useParams } from 'react-router-dom';
 // import spemaiLogo from '../../../../assets/spemaiLogo.png';
 import { sign } from '../../../_services/dashboard';
-
-
-
-
-
-
-
+import axios from "axios";
 interface FormValues {
     email: string;
     password: string;
@@ -91,88 +85,88 @@ function SigninPage() {
         },
 
     });
+    
     // const handleSubmit = async (data: any, setSubmitting: any) => {
     //     setSubmitting(true);
       
+
+    //     const params = data.email;
+      
     //     try {
-    //       const response = await sign(data); // Call the API
-    //       const dataPost = response;
-    //       console.log(dataPost,'dataPostdataPostdataPost')
-      
-    //       if (dataPost.status === 100) {
-           
-    //         saveDataToLocalStorage(dataPost.data?.access);
-    //         localStorage.setItem("token", dataPost.data.access);
-    //         toast.success("Login successful! 🎉");
-    //         navigate(`/`);
-    //       } else {
-            
-    //         toast.error(dataPost.message || "Login failed. Please check your credentials.");
-    //       }
-    //     } catch (error: any) {
-         
-    //       if (error.response) {
-    //         const { status, data } = error.response;
-      
-    //         if (status === 401) {
-             
-    //           toast.error("Invalid credentials. Please try again.");
+    //         const response = await sign(data);
+    //         const dataPost = await response;
+    //         console.log("Resp54555555onse:", dataPost);
+    //         localStorage.setItem("token", dataPost['data']['access'])
+    //         setSubmitting(false);
+    //         if (dataPost.status == 100) {
+    //             saveDataToLocalStorage(dataPost.data?.access)
+    //             toast.success("Success");
+    //             navigate(`/`)
+
     //         } else {
-              
-    //           toast.error(data?.message || "An unexpected error occurred. Please try again.");
+    //             console.log('falidddd')
+    //             setSubmitting(false);
+    //             toast.error(dataPost.detail)
+
     //         }
-    //       } else {
+    //     } catch (error) {
+    //         toast.error("Fail");
+    //         console.error("Error:", error);
+    //         setSubmitting(false);
            
-    //         console.error("Unexpected error:", error);
-    //         toast.error("Something went wrong. Please try again.");
-    //       }
-    //     } finally {
-    //       setSubmitting(false);
-    //       toast.error("Something went wrong. Please try again.");
     //     }
-    //   };
-      
-      
+
+
+    // };
+
 
 
     const handleSubmit = async (data: any, setSubmitting: any) => {
-        setSubmitting(true);
-      
-
-        const params = data.email;
-      
         try {
             const response = await sign(data);
-            const dataPost = await response;
-            console.log("Resp54555555onse:", dataPost);
-            localStorage.setItem("token", dataPost['data']['access'])
-            setSubmitting(false);
-            if (dataPost.status == 100) {
-                saveDataToLocalStorage(dataPost.data?.access)
-                toast.success("Success");
+    
+            // If the response is successful
+            const dataPost = response;
+            console.log(response,'dataPost.status')
+            if (dataPost.status === 100) {
+                localStorage.setItem("token", dataPost.data.access);
                 navigate(`/`)
-
+                toast.success("Login successful!");
+                // Navigate to the dashboard or next page
             } else {
-                setSubmitting(false);
-                toast.error(dataPost.message)
-
+                // Handle non-200 statuses in the response body
+                toast.error(dataPost.message || "Login failed!");
             }
+    
         } catch (error) {
-            console.error("Error:", error);
+           
+            // Handle 401 or other Axios errors
+            if (axios.isAxiosError(error) && error.response) {
+                const { status, data } = error.response;
+                console.log(data.message,'statusstatus')
+    
+                if (status === 401) {
+                    console.log(data?.data.detail,'9999999999')
+                    toast.error(data?.data.detail || "Incorrect credentials. Please try again.");
+                } else {
+                    toast.error(data?.data.detail || "An unexpected error occurred.");
+                }
+            } else {
+                // Handle non-Axios errors (e.g., network issues)
+                toast.error("Something went wrong. Please try again later.");
+            }
+        } finally {
             setSubmitting(false);
-            toast.success("Fail");
         }
-
-
     };
     useEffect(() => {
-
-
     }, []);
 
 
     return (
+        
         <div className="login-root container-fluid">
+            <Toaster position="top-right" reverseOrder={false} />
             <div className='row'>
                 <div className='col-sm-12 col-md-6 col-lg-6 left-side'>
                     {/* <div className='row mb-4'>

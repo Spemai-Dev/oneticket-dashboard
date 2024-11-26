@@ -55,7 +55,7 @@ const ViewTransaction = (props: any) => {
                                 </div>
 
                                 <div className="ticket-info">
-                                    <h4 className="canvas_sub_title mt-5 mb-2">User Details</h4>
+                                    <h4 className="canvas_sub_title mt-5 mb-2">Tickets Details</h4>
                                     {viewData?.tickets && viewData.tickets.length > 0 ? (
                                         viewData.tickets.map((ticket, index) => (
                                             <div className="row" key={index}>
@@ -71,65 +71,6 @@ const ViewTransaction = (props: any) => {
                                         <p>No tickets available.</p>
                                     )}
                                 </div>
-
-
-
-                                {/* 
-                        <div className="row">
-                            <div className="col-6"><span className="lable_name">Verification Method</span></div>
-                            <div className="col-6"><span className="lable_date">: Method</span></div>
-                        </div>
-                        <div className="row">
-                            <div className="col-6"><span className="lable_name">NIC/Passport</span></div>
-                            <div className="col-6"><span className="lable_date">: John</span></div>
-                        </div>
-                        <div className="row">
-                            <div className="col-6"><span className="lable_name">DOB</span></div>
-                            <div className="col-6"><span className="lable_date">: John</span></div>
-                        </div>
-                        <div className="row">
-                            <div className="col-6"><span className="lable_name">Address</span></div>
-                            <div className="col-6"><span className="lable_date">: John</span></div>
-                        </div>
-                        <h4 className="canvas_sub_title mt-2 mb-2">Payment Details</h4>
-                      
-                        <div className="row">
-                            <div className="col-6"><span className="lable_name">Amount</span></div>
-                            <div className="col-6"><span className="lable_date">: 123lkr</span></div>
-                        </div>
-                        <div className="row">
-                            <div className="col-6"><span className="lable_name">Payment Method</span></div>
-                            <div className="col-6"><span className="lable_date">: Visa</span></div>
-                        </div>
-                        <div className="row">
-                            <div className="col-6"><span className="lable_name">Transaction Status</span></div>
-                            <div className="col-6"><span className="lable_date">: Success</span></div>
-                        </div>
-                        <h4 className="canvas_sub_title mt-2 mb-2">Ticket Details</h4>
-                        <div className="row">
-                            <div className="col-6"><span className="lable_name">Event Name</span></div>
-                            <div className="col-6"><span className="lable_date">: Success</span></div>
-                        </div>
-                        <div className="row">
-                            <div className="col-6"><span className="lable_name">No of Tickets</span></div>
-                            <div className="col-6"><span className="lable_date">: 2</span></div>
-                        </div>
-                        <div className="row">
-                            <div className="col-6"><span className="lable_name">Ticket Category</span></div>
-                            <div className="col-6"><span className="lable_date">: Success</span></div>
-                        </div>
-                        <div className="row">
-                            <div className="col-6"><span className="lable_name">Seat Number</span></div>
-                            <div className="col-6"><span className="lable_date">: Success</span></div>
-                        </div>
-                        <h4 className="canvas_sub_title mt-2 mb-2">Note</h4>
-                        <div className="row">
-                            <div className="col-12"><span className="lable_name">Lorem ipsum</span></div>
-                           
-                        </div>  */}
-
-
-
 
                             </div>
                         </div>
