@@ -47,7 +47,7 @@ export async function get(endpoint) {
         },
       });
   
-      console.log(response, "API Response");
+      // console.log(response, "API Response");
   
       
       if (response.status === 401) {

@@ -522,7 +522,7 @@ function Dashbord() {
                                                     <div className="section_d">
 
                                                         <p className='dh_data'>
-                                                            {eventData && eventData.is_sold_out ? (
+                                                            {ticket && ticket.is_sold_out ? (
                                                                 <span className='sold-out'>Sold Out</span>
                                                             ) : (
                                                                 <span className='available'>Available</span>
@@ -623,7 +623,7 @@ function Dashbord() {
                                 <input
                                     type="text"
                                     className="search-input"
-                                    placeholder="Search by Email"
+                                    placeholder="Search"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />

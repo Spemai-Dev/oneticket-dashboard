@@ -127,7 +127,7 @@ function SigninPage() {
     
             // If the response is successful
             const dataPost = response;
-            console.log(response,'dataPost.status')
+            // console.log(response,'dataPost.status')
             if (dataPost.status === 100) {
                 localStorage.setItem("token", dataPost.data.access);
                 navigate(`/`)
@@ -143,10 +143,10 @@ function SigninPage() {
             // Handle 401 or other Axios errors
             if (axios.isAxiosError(error) && error.response) {
                 const { status, data } = error.response;
-                console.log(data.message,'statusstatus')
+                // console.log(data.message,'statusstatus')
     
                 if (status === 401) {
-                    console.log(data?.data.detail,'9999999999')
+                    // console.log(data?.data.detail,'9999999999')
                     toast.error(data?.data.detail || "Incorrect credentials. Please try again.");
                 } else {
                     toast.error(data?.data.detail || "An unexpected error occurred.");
