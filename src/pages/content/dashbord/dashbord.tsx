@@ -55,6 +55,7 @@ function Dashbord() {
     const [data, setEventDetails] = useState<any>(null);
     const [modalData, setModalData] = useState(null);
     const [isCategoryCreateOffCanvasOpen, setIsCategoryCreateOffCanvasOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handlePageChange = async (pageNumber: any) => {
         await setCurrentPage(pageNumber);
@@ -104,17 +105,51 @@ function Dashbord() {
 
     };
 
+    // const getData = async () => {
+    //     const data = await getALLevent();
+
+    //    if(data.data){
+    //     setData(data.data.data);
+    //     setDefaultEventId(data.data.data[0].event_details);
+    //     fetchData(data.data.data[0].event_details);
+    //     getDataParticipants()
+
+
+
+    //     getVolume(data.data.data[0].event_details)
+
+    //    }
+    // };
     const getData = async () => {
-        const data = await getALLevent();
+        setLoading(true); // Set loading to true before starting the data fetch
+        try {
+            const data = await getALLevent();
 
-        console.log("Reimbursement data", data.data.data);
-        setData(data.data.data);
-        setDefaultEventId(data.data.data[0].event_details);
-        fetchData(data.data.data[0].event_details);
-        getDataParticipants()
-        // getVolume(data.data.data[0].event_details)
+            // Check if data exists and has the expected structure
+            if (data?.data?.data) {
+                const eventData = data.data.data;
+                console.log(eventData.length, 'length');
 
+                setData(eventData);
+                const firstEventDetails = eventData[0]?.event_details;
+
+                if (firstEventDetails) {
+                    setDefaultEventId(firstEventDetails);
+                    await fetchData(firstEventDetails); // Ensure fetchData is awaited if it's async
+                    await getDataParticipants();       // Await if needed
+                    // Uncomment this if getVolume is necessary and async
+                    // await getVolume(firstEventDetails);
+                }
+            } else {
+                console.error("Invalid data structure or no data available");
+            }
+        } catch (error) {
+            console.error("Error fetching event data:", error);
+        } finally {
+            setLoading(false); // Set loading to false after data fetch is complete
+        }
     };
+    
     const newEvent = async (id) => {
         setDefaultEventId(id);
         getEventStatus(id)
@@ -148,6 +183,7 @@ function Dashbord() {
              setId(eventId)
 
             setEventData(data.data.data);
+            console.log(data.data.data.length,'gggggggggggggggggggggg')
             setEventDetails(data.data.data.tickets);
             console.log(data.data.data.tickets, 'rroofcc')
 
@@ -259,14 +295,44 @@ function Dashbord() {
     useEffect(() => {
         getData()
     }, []);
-    if (!eventData) {
-        return <p style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '80vh'
-        }}>Loading...</p>;
+    // if (!eventData) {
+    //     return <p style={{
+    //         display: 'flex',
+    //         justifyContent: 'center',
+    //         alignItems: 'center',
+    //         height: '80vh'
+    //     }}>Loading...</p>;
+    // }
+    if (loading) {
+        return (
+            <p
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '80vh',
+                }}
+            >
+                Loading...
+            </p>
+        );
     }
+    
+    if (!eventData && !loading) {
+        return (
+            <p
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '80vh',
+                }}
+            >
+                Event not available
+            </p>
+        );
+    }
+    
     const parseTicketValue = (value: string): number => {
         return parseInt(value, 10) || 0;
     };
@@ -543,9 +609,9 @@ function Dashbord() {
                                             <div key={ticket.id} className="col-4 borderCol_right box_grid">
                                                 <p className="box_name">{ticket.name}</p>
                                                 <h4 className="box_data_1">
-                                                    {parseTicketValue(ticket.purchased_ticket_count)}
+                                                    {parseTicketValue(ticket.checked_in_ticket_count)}
                                                     <span className="box_data_2">
-                                                        /{parseTicketValue(ticket.checked_in_ticket_count)}
+                                                        /{parseTicketValue(ticket.purchased_ticket_count)}
                                                     </span>
                                                 </h4>
                                             </div>

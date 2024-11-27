@@ -121,44 +121,47 @@ function SigninPage() {
 
 
 
-    const handleSubmit = async (data: any, setSubmitting: any) => {
+
+    const handleSubmit = async (data: any, setSubmitting: (isSubmitting: boolean) => void) => {
         try {
             const response = await sign(data);
     
             // If the response is successful
             const dataPost = response;
-            // console.log(response,'dataPost.status')
             if (dataPost.status === 100) {
                 localStorage.setItem("token", dataPost.data.access);
-                navigate(`/`)
+                navigate(`/`);
                 toast.success("Login successful!");
-                // Navigate to the dashboard or next page
             } else {
-                // Handle non-200 statuses in the response body
+                // Handle non-100 statuses in the response body
                 toast.error(dataPost.message || "Login failed!");
             }
-    
         } catch (error) {
-           
-            // Handle 401 or other Axios errors
+            // Handle Axios errors
             if (axios.isAxiosError(error) && error.response) {
                 const { status, data } = error.response;
-                // console.log(data.message,'statusstatus')
     
                 if (status === 401) {
-                    // console.log(data?.data.detail,'9999999999')
-                    toast.error(data?.data.detail || "Incorrect credentials. Please try again.");
+                    if (data?.status === 200) {
+                        toast.error(data?.data?.detail || "Incorrect credentials. Please try again.");
+                    } else if (data?.status === 201) {
+                        toast.error(data?.message || "User not found.");
+                    } else {
+                        toast.error("Unauthorized access. Please check your credentials.");
+                    }
                 } else {
-                    toast.error(data?.data.detail || "An unexpected error occurred.");
+                    toast.error(data?.data?.detail || "An unexpected error occurred.");
                 }
             } else {
-                // Handle non-Axios errors (e.g., network issues)
+                // Handle non-Axios errors
                 toast.error("Something went wrong. Please try again later.");
             }
         } finally {
+            // Ensure setSubmitting is always called
             setSubmitting(false);
         }
     };
+    
     useEffect(() => {
     }, []);
 
