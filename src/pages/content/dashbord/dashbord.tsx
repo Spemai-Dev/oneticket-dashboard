@@ -50,6 +50,7 @@ function Dashbord() {
     const [defaultEventId, setDefaultEventId] = useState("")
     const [eventData, setEventData] = useState<any>(null);
     const [eventId, setId] = useState(defaultEventId)
+   
     const [volume, setVolume] = useState<any>(null);
     const [data, setEventDetails] = useState<any>(null);
     const [modalData, setModalData] = useState(null);
@@ -69,10 +70,7 @@ function Dashbord() {
         }
         return params.toString();
     }
-    // const handleOpenOffCanvasCatCreate = () => {
-    //     setIsCategoryCreateOffCanvasOpen(true);
-
-    // };
+   
     const handleOpenOffCanvasCatCreate = async (id2) => {
         if (!id2) return; // Ensure id is available
 
@@ -114,15 +112,13 @@ function Dashbord() {
         setDefaultEventId(data.data.data[0].event_details);
         fetchData(data.data.data[0].event_details);
         getDataParticipants()
-        getVolume(data.data.data[0].event_details)
+        // getVolume(data.data.data[0].event_details)
 
     };
     const newEvent = async (id) => {
-        // const data = await getALLevent();
-
         setDefaultEventId(id);
-        getEventStatus()
-        getDataParticipants()
+        getEventStatus(id)
+        // getDataParticipants()
         getVolume(id)
 
 
@@ -149,7 +145,7 @@ function Dashbord() {
         const data = await getEventDetails(eventId);
         if (data.data?.status === 100) {
             newEvent(eventId)
-            setId(eventId)
+             setId(eventId)
 
             setEventData(data.data.data);
             setEventDetails(data.data.data.tickets);
@@ -189,12 +185,12 @@ function Dashbord() {
             toast.error('An error occurred while fetching participants.');
         }
     };
-    const getEventStatus = async () => {
+    const getEventStatus = async (id:any) => {
         if (!eventId) return;
 
         try {
             let params = {
-                event_id: eventId,
+                event_id: id,
             };
             const data = await getEventS(jsonToUrlParams(params));
 
@@ -220,22 +216,6 @@ function Dashbord() {
         return () => clearTimeout(delayDebounce);
     }, [searchQuery, tablePageIndex, eventId]);
 
-
-    // useEffect(() => {
-    //     if (searchQuery.trim() === '') {
-    //         setFilteredData(partData);
-    //     } else {
-    //         const filtered = partData.filter((item) =>
-    //             item.transaction_reference.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //             item.datetime.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //             item.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //             item.customer_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //             item.total_amount.includes(searchQuery) // No need for `.toLowerCase()` as it's numeric-like
-    //         );
-    //         setFilteredData(filtered);
-    //         console.log(filtered, 'filtered data');
-    //     }
-    // }, [searchQuery, partData]);
     useEffect(() => {
         const trimmedQuery = searchQuery.trim().toLowerCase(); // Trim and lowercase query once
 
