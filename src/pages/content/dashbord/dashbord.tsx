@@ -12,7 +12,7 @@ import { environment } from '../../../environment/enviroment.js';
 import toast from 'react-hot-toast';
 import { deleteToken } from "../../../_auth/auth.js";
 import { useNavigate } from "react-router-dom";
-import { getALLevent, getEventDetails, getPartiDetails, geteventVolume, getDetailsById, getEventS } from "../../../_services/dashboard.js";
+import { getALLevent, getEventDetails, getPartiDetails, geteventVolume, getDetailsById, getEventS, download } from "../../../_services/dashboard.js";
 import { Formik, Form, Field } from 'formik';
 import Pagination from "../../../components/pagination/pagination.tsx";
 
@@ -50,7 +50,7 @@ function Dashbord() {
     const [defaultEventId, setDefaultEventId] = useState("")
     const [eventData, setEventData] = useState<any>(null);
     const [eventId, setId] = useState(defaultEventId)
-   
+
     const [volume, setVolume] = useState<any>(null);
     const [data, setEventDetails] = useState<any>(null);
     const [modalData, setModalData] = useState(null);
@@ -71,7 +71,7 @@ function Dashbord() {
         }
         return params.toString();
     }
-   
+
     const handleOpenOffCanvasCatCreate = async (id2) => {
         if (!id2) return; // Ensure id is available
 
@@ -149,7 +149,9 @@ function Dashbord() {
             setLoading(false); // Set loading to false after data fetch is complete
         }
     };
-    
+
+
+
     const newEvent = async (id) => {
         setDefaultEventId(id);
         getEventStatus(id)
@@ -180,10 +182,10 @@ function Dashbord() {
         const data = await getEventDetails(eventId);
         if (data.data?.status === 100) {
             newEvent(eventId)
-             setId(eventId)
+            setId(eventId)
 
             setEventData(data.data.data);
-            console.log(data.data.data.length,'gggggggggggggggggggggg')
+            console.log(data.data.data.length, 'gggggggggggggggggggggg')
             setEventDetails(data.data.data.tickets);
             console.log(data.data.data.tickets, 'rroofcc')
 
@@ -221,7 +223,7 @@ function Dashbord() {
             toast.error('An error occurred while fetching participants.');
         }
     };
-    const getEventStatus = async (id:any) => {
+    const getEventStatus = async (id: any) => {
         if (!eventId) return;
 
         try {
@@ -275,10 +277,6 @@ function Dashbord() {
         }
     }, [searchQuery, partData]);
 
-
-
-
-
     const getVolume = async (eventId) => {
         if (!eventId) return; // Make sure the eventId is available before fetching
         const data = await geteventVolume(eventId);
@@ -295,14 +293,6 @@ function Dashbord() {
     useEffect(() => {
         getData()
     }, []);
-    // if (!eventData) {
-    //     return <p style={{
-    //         display: 'flex',
-    //         justifyContent: 'center',
-    //         alignItems: 'center',
-    //         height: '80vh'
-    //     }}>Loading...</p>;
-    // }
     if (loading) {
         return (
             <p
@@ -317,7 +307,6 @@ function Dashbord() {
             </p>
         );
     }
-    
     if (!eventData && !loading) {
         return (
             <p
@@ -332,23 +321,38 @@ function Dashbord() {
             </p>
         );
     }
-    
+
     const parseTicketValue = (value: string): number => {
         return parseInt(value, 10) || 0;
     };
-    const totalTicketsSold = data.reduce((acc, ticket) => {
-        return acc + (parseInt(ticket.total_tickets, 10) - parseInt(ticket.remaining_tickets, 10));
-    }, 0);
+    // download report
+    const handleDownload = async () => {
+        setLoading(true); // Set loading to true before starting the data fetch
+        try {
+            const data = await download(eventId);
 
-    const totalSalesAmount = data.reduce((acc, ticket) => {
-        return acc + (parseInt(ticket.total_tickets, 10) - parseInt(ticket.remaining_tickets, 10)) * parseFloat(ticket.ticket_amount);
-    }, 0);
+            // if (data?.data?.data) {
+            //     const eventData = data.data.data;
+            //     console.log(eventData.length, 'length');
 
-    //    get status
+            //     setData(eventData);
+            //     const firstEventDetails = eventData[0]?.event_details;
 
+            //     if (firstEventDetails) {
+            //         setDefaultEventId(firstEventDetails);
+            //         await fetchData(firstEventDetails); // Ensure fetchData is awaited if it's async
+            //         await getDataParticipants();       // Await if needed
 
-
-
+            //     }
+            // } else {
+            //     console.error("Invalid data structure or no data available");
+            // }
+        } catch (error) {
+            console.error("Error fetching event data:", error);
+        } finally {
+            setLoading(false); // Set loading to false after data fetch is complete
+        }
+    };
     return (
         <div className='main'>
             <div className="container mt-3">
@@ -460,7 +464,7 @@ function Dashbord() {
                                     <img
                                         style={{
                                             width: '100%',
-                                             height: 'auto',
+                                            height: 'auto',
                                             // height: '100%',
                                             // objectFit: 'cover'
                                         }}
@@ -654,16 +658,34 @@ function Dashbord() {
                         <h3 className="event_name_sub mb-4 mt-4">Participants List</h3>
 
                         <div className="d-flex justify-content-end align-items-center">
-                            <span style={{ color: '#8E00AB', fontSize: 'large' }}><CgSoftwareDownload /><span style={{ fontSize: '14px', color: '#8E00AB', marginLeft: '3px', fontWeight: '500', marginRight: '10px' }}>Download Reports</span></span>
+                            {/* <span style={{ color: '#8E00AB', fontSize: 'large' }}><CgSoftwareDownload /><span style={{ fontSize: '14px', color: '#8E00AB', marginLeft: '3px', fontWeight: '500', marginRight: '10px' }}>Download Reports</span></span> */}
+                            {dataCount > 0 && (
+                                <div
+                                    onClick={handleDownload}
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    <span style={{ color: "#8E00AB", fontSize: "large" }}>
+                                        <CgSoftwareDownload />
+                                    </span>
+                                    <span
+                                        style={{
+                                            fontSize: "14px",
+                                            color: "#8E00AB",
+                                            marginLeft: "3px",
+                                            fontWeight: "500",
+                                            marginRight: "10px",
+                                        }}
+                                    >
+                                        Download Reports
+                                    </span>
+                                </div>
+                            )}
 
-                            {/* <div className="input-with-icon">
-                                <IoSearchOutline className="search-icon" />
-                                <input
-                                    type="text"
-                                    className="search-input"
-                                    placeholder="Search"
-                                />
-                            </div> */}
+
                             <div className="input-with-icon">
                                 <IoSearchOutline className="search-icon" />
                                 <input

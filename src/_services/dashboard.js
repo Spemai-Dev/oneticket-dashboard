@@ -1,4 +1,4 @@
-import { get,unauth_add} from "./common"
+import { get,unauth_add,getIpgReportNew} from "./common"
 export const sign=async(body)=>{
     return await unauth_add("organization/portal/login/",body)
 }
@@ -51,3 +51,11 @@ export const geteventVolume = async (eventId) => {
       return error;
     }
 }
+// export const download =async(params)=>{
+//   return await getIpgReportNew("organization/dashboard/report/?event_id=" + params)
+// }
+// Dashboard service for downloading reports
+export const download = async (params) => {
+  const endpoint = `organization/dashboard/report/?event_id=${params}`;
+  return await getIpgReportNew(endpoint);
+};
