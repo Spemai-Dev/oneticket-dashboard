@@ -34,24 +34,24 @@ const ViewTransaction = (props: any) => {
                             <div className="d">
                                 <h4 className="canvas_sub_title mt-2 mb-2">User Details</h4>
                                 <div className="row">
-                                    <div className="col-6"><span className="lable_name">First Name </span></div>
-                                    <div className="col-6"><span className="lable_date">:  {viewData?.customer_first_name || 'Not Available'}</span></div>
+                                    <div className="col-3"><span className="lable_name">First Name </span></div>
+                                    <div className="col-9"><span className="lable_date">:  {viewData?.customer_first_name || 'Not Available'}</span></div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-6"><span className="lable_name">Last Name</span></div>
-                                    <div className="col-6"><span className="lable_date">: {viewData?.customer_last_name || 'Not Available'}</span></div>
+                                    <div className="col-3"><span className="lable_name">Last Name</span></div>
+                                    <div className="col-9"><span className="lable_date">: {viewData?.customer_last_name || 'Not Available'}</span></div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-6"><span className="lable_name">Email Address</span></div>
-                                    <div className="col-6"><span className="lable_date">: {viewData?.customer_email || 'Not Available'}</span></div>
+                                    <div className="col-3"><span className="lable_name">Email Address</span></div>
+                                    <div className="col-9"><span className="lable_date">: {viewData?.customer_email || 'Not Available'}</span></div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-6"><span className="lable_name">Phone Number</span></div>
-                                    <div className="col-6"><span className="lable_date">: {viewData?.customer_phone_no || 'Not Available'}</span></div>
+                                    <div className="col-3"><span className="lable_name">Phone Number</span></div>
+                                    <div className="col-9"><span className="lable_date">: {viewData?.customer_phone_no || 'Not Available'}</span></div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-6"><span className="lable_name">Date and Time</span></div>
-                                    <div className="col-6"><span className="lable_date">: {viewData?.datetime || 'Not Available'}</span></div>
+                                    <div className="col-3"><span className="lable_name">Date and Time</span></div>
+                                    <div className="col-9"><span className="lable_date">: {viewData?.datetime || 'Not Available'}</span></div>
                                 </div>
 
                                 <div className="ticket-info">
@@ -59,10 +59,10 @@ const ViewTransaction = (props: any) => {
                                     {viewData?.tickets && viewData.tickets.length > 0 ? (
                                         viewData.tickets.map((ticket, index) => (
                                             <div className="row" key={index}>
-                                                <div className="col-6">
+                                                <div className="col-3">
                                                     <span className="lable_name">{ticket.eventTickets__ticket_name || "Unknown Ticket"}</span>
                                                 </div>
-                                                <div className="col-6">
+                                                <div className="col-9">
                                                     <span className="lable_date">: {ticket.count || 0} ticket(s)</span>
                                                 </div>
                                             </div>

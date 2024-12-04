@@ -105,21 +105,6 @@ function Dashbord() {
 
     };
 
-    // const getData = async () => {
-    //     const data = await getALLevent();
-
-    //    if(data.data){
-    //     setData(data.data.data);
-    //     setDefaultEventId(data.data.data[0].event_details);
-    //     fetchData(data.data.data[0].event_details);
-    //     getDataParticipants()
-
-
-
-    //     getVolume(data.data.data[0].event_details)
-
-    //    }
-    // };
     const getData = async () => {
         setLoading(true); // Set loading to true before starting the data fetch
         try {
@@ -128,17 +113,19 @@ function Dashbord() {
             // Check if data exists and has the expected structure
             if (data?.data?.data) {
                 const eventData = data.data.data;
-                console.log(eventData.length, 'length');
+                console.log(eventData, 'eventData2');
 
                 setData(eventData);
+                // Await if needed
                 const firstEventDetails = eventData[0]?.event_details;
 
                 if (firstEventDetails) {
                     setDefaultEventId(firstEventDetails);
                     await fetchData(firstEventDetails); // Ensure fetchData is awaited if it's async
-                    await getDataParticipants();       // Await if needed
-                    // Uncomment this if getVolume is necessary and async
-                    // await getVolume(firstEventDetails);
+                    await getDataParticipants();
+                    await getEventStatus(firstEventDetails)
+
+
                 }
             } else {
                 console.error("Invalid data structure or no data available");
@@ -185,7 +172,6 @@ function Dashbord() {
             setId(eventId)
 
             setEventData(data.data.data);
-            console.log(data.data.data.length, 'gggggggggggggggggggggg')
             setEventDetails(data.data.data.tickets);
             console.log(data.data.data.tickets, 'rroofcc')
 
@@ -224,7 +210,7 @@ function Dashbord() {
         }
     };
     const getEventStatus = async (id: any) => {
-        if (!eventId) return;
+        if (!id) return;
 
         try {
             let params = {
@@ -292,6 +278,7 @@ function Dashbord() {
     };
     useEffect(() => {
         getData()
+
     }, []);
     if (loading) {
         return (
@@ -330,23 +317,6 @@ function Dashbord() {
         setLoading(true); // Set loading to true before starting the data fetch
         try {
             const data = await download(eventId);
-
-            // if (data?.data?.data) {
-            //     const eventData = data.data.data;
-            //     console.log(eventData.length, 'length');
-
-            //     setData(eventData);
-            //     const firstEventDetails = eventData[0]?.event_details;
-
-            //     if (firstEventDetails) {
-            //         setDefaultEventId(firstEventDetails);
-            //         await fetchData(firstEventDetails); // Ensure fetchData is awaited if it's async
-            //         await getDataParticipants();       // Await if needed
-
-            //     }
-            // } else {
-            //     console.error("Invalid data structure or no data available");
-            // }
         } catch (error) {
             console.error("Error fetching event data:", error);
         } finally {
@@ -482,7 +452,7 @@ function Dashbord() {
                 <h3 className='event_name_sub mb-4 mt-4'>Event tickets</h3>
                 <div className='dh_summary_section'  >
                     <div className="row" style={{ display: 'flex' }}>
-                        <div className='col-sm-12 col-md-5 col-lg-7' style={{ display: 'flex', flexDirection: 'column' }}>
+                        <div className='col-sm-12 col-md-4 col-lg-7' style={{ display: 'flex', flexDirection: 'column' }}>
                             <div className='event_d_grid2' style={{ flexGrow: 1 }}>
                                 <div className='row'>
                                     <div className='col-20'>
@@ -568,7 +538,7 @@ function Dashbord() {
                                                         <p className="dh_data">{ticket.ticket_visualize_amount}</p>
                                                     </div>
                                                 </div>
-                                                <div className='col-20'>
+                                                {/* <div className='col-20'>
                                                     <div className="section_d">
 
                                                         <p className='dh_data'>
@@ -580,20 +550,30 @@ function Dashbord() {
                                                         </p>
 
                                                     </div>
-                                                </div>
-                                                {/* <div className='col-20'>
+                                                </div> */}
+                                                <div className="col-20">
                                                     <div className="section_d">
-
-                                                        <p className='dh_data'>
-                                                            {eventData && eventData.is_active ? (
-                                                                <span className='sold-out'>Active</span>
+                                                        <p className="dh_data">
+                                                            {ticket ? (
+                                                                ticket.is_delete ? (
+                                                                    <span className="deleted">Deleted</span>
+                                                                ) : ticket.is_active ? (
+                                                                    ticket.is_sold_out ? (
+                                                                        <span className="sold-out">Sold Out</span>
+                                                                    ) : (
+                                                                        <span className="available">Available</span>
+                                                                    )
+                                                                ) : (
+                                                                    <span className="inactive">Inactive</span>
+                                                                )
                                                             ) : (
-                                                                <span className='available'>Deactive</span>
+                                                                <span className="no-data">No Ticket Data</span>
                                                             )}
                                                         </p>
-
                                                     </div>
-                                                </div> */}
+                                                </div>
+
+
 
                                             </div>
                                             <div className='line_summary_table mt-3 mb-3'></div>
@@ -736,7 +716,7 @@ function Dashbord() {
                                                                 className="check_in"
                                                                 style={{ color: item.is_checked_in ? "#28a745" : "#dc3545" }}
                                                             >
-                                                                {item.is_checked_in ? "Check in" : "Check in pending"}
+                                                                {item.is_checked_in ? "Checked in" : "Check in pending"}
                                                             </div>
 
                                                             <div onClick={() => { handleOpenOffCanvasCatCreate(item.id) }} className="check_icon"><IoEyeOutline /></div>
