@@ -102,6 +102,8 @@ text-align: start;
  font-size:16px ;
  font-weight: 600;
  text-align: start;
+ margin-top: 1.5rem;
+ margin-bottom: 1.5rem;
 }
 .dh_summary_section{
     width: 100%;
@@ -229,18 +231,7 @@ text-transform: capitalize;
     cursor: pointer;
   }
 
-  @media (max-width: 768px) {
-    .image_hide{
-        display: none;
-    }
-    .table_scroll{
-    overflow-y: scroll;
-    }
-    .off-canvas {
-        width: 100%;
-    
-    }
-}
+  
 .coomin_zoon{
   padding-top: 3rem!important;
   padding-bottom: 3rem!important;
@@ -279,6 +270,76 @@ text-transform: capitalize;
   color: #388E3C; /* Green */
   font-weight: bold;
 }
+
+
+@media (max-width: 768px) {
+  .image_hide {
+    display: none;
+  }
+  .table_scroll {
+    overflow-y: scroll;
+  }
+  .off-canvas {
+    width: 100%;
+  }
+  .sub_name {
+    display: block; /* Ensure the container behaves like a block */
+    width: 100%; /* Full width on smaller screens */
+    margin-top: 10px; /* Add spacing if needed */
+  }
+  .event_name {
+    display: block; /* Make the event name a block element */
+    text-align: left; /* Align text to the left */
+  }
+  .select_ {
+    display: block; /* Make the selector take full width */
+    margin-top: 5px; /* Add spacing between the elements */
+    margin-left: 0px;
+  }
+ .responsive_tab{
+  padding-bottom: 15px;
+ }
+ .left_p, .center_p, .right_p {
+  font-size: 10px;
+}
+.event_name_sub{
+  margin-top: 0!important;
+  margin-bottom: 10px!important;
+  font-size: 22px;
+}
+ .d-flex {
+  flex-direction: column; /* Stack items vertically */
+  align-items: flex-start; /* Align items to the left */
+}
+
+.input-with-icon {
+  width: 100%; /* Full width for the search bar */
+  margin-top: 10px; /* Add spacing */
+}
+
+.search-input {
+  width: 100%; /* Make the input stretch full width */
+}
+
+.download-section {
+  margin-bottom: 10px; /* Add spacing below download section */
+}
+
+.check_in {
+  padding: 4px 5px;
+  display: flex;
+  font-size: 10px;
+  font-weight: 00;
+  width: 100px;
+  line-height: 13px;
+  margin-bottom: 3px;
+}
+.check_icon {
+ margin-left: 0;
+ padding: 2px 2px;
+}
+}
+
 
 
 

@@ -23,3 +23,8 @@
 .page_c{
     text-align: center;
 }
+@media (max-width: 768px) {
+    .left_p, .center_p, .right_p {
+        font-size: 10px;
+    }
+}

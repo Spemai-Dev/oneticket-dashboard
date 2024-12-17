@@ -356,18 +356,19 @@ function Dashbord() {
                             </Form>
                         )}
                     </Formik>
-                </span></h3>
+                </span>
+                </h3>
                 <div className='row'>
                     <div className='col-sm-12 col-md-6 col-lg-6'>
                         <div className='row'>
-                            <div className='col-6'>
+                            <div className='col-sm-12 col-md-6 col-lg-6 responsive_tab'>
                                 <div className='menu_itam'  >
                                     {/* <p className='dh-count mt-3'>{totalTicketsSold}</p> */}
                                     <p className='dh-count mt-3'> {(volume && volume.total_tickets && !isNaN(volume.total_tickets) ? volume.total_tickets : '0')}</p>
                                     <p className='dh-sub-description mt-3'>Number of Ticket Sale</p>
                                 </div>
                             </div>
-                            <div className='col-6'>
+                            <div className='col-sm-12 col-md-6 col-lg-6 responsive_tab'>
                                 <div className='menu_itam2'  >
                                     {/* <p className='dh-count2 mt-3'>{totalSalesAmount.toFixed(2)}  <span className='dh-currency'>{eventData.tickets_currency || 'N/A'}</span></p> */}
                                     <p className='dh-count2 mt-3'>
@@ -635,10 +636,9 @@ function Dashbord() {
 
                 <div className="row mb-4 mt-4">
                     <div className="col d-flex justify-content-between align-items-center">
-                        <h3 className="event_name_sub mb-4 mt-4">Participants List</h3>
+                        <h3 className="event_name_sub">Participants List</h3>
 
                         <div className="d-flex justify-content-end align-items-center">
-                            {/* <span style={{ color: '#8E00AB', fontSize: 'large' }}><CgSoftwareDownload /><span style={{ fontSize: '14px', color: '#8E00AB', marginLeft: '3px', fontWeight: '500', marginRight: '10px' }}>Download Reports</span></span> */}
                             {dataCount > 0 && (
                                 <div
                                     onClick={handleDownload}
