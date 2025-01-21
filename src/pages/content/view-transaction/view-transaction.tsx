@@ -80,6 +80,7 @@ const ViewTransaction = (props: any) => {
         }
     };
     const totalTicketCount = viewData?.tickets?.reduce((total, ticket) => total + ticket.count, 0);
+    const totalTicketAmount = viewData?.tickets?.reduce((total, ticket) => total + ticket.ticket_amount, 0);
 
     return (
         <div >
@@ -100,7 +101,7 @@ const ViewTransaction = (props: any) => {
                     <div className="row canvas_body2">
                         <div className="col-12">
                             <div className="d">
-                                <h4 className="canvas_sub_title mt-2 mb-2">User Details</h4>
+                                <h4 className="canvas_sub_title mt-2">User Details</h4>
                                 <div className="row">
                                     <div className="col-4"><span className="lable_name">First Name </span></div>
                                     <div className="col-8"><span className="lable_date">:  {viewData?.customer_first_name || 'Not Available'}</span></div>
@@ -117,16 +118,21 @@ const ViewTransaction = (props: any) => {
                                     <div className="col-4"><span className="lable_name">Phone Number</span></div>
                                     <div className="col-8"><span className="lable_date">: {viewData?.customer_phone_no || 'Not Available'}</span></div>
                                 </div>
+                               
+                                <div className="row">
+                                    <div className="col-4"><span className="lable_name">Verification ID</span></div>
+                                    <div className="col-8"><span className="lable_date">: {viewData?.verification_id || 'Not Available'} ({viewData?.verification_method || 'Not Available'})</span></div>
+                                </div>
                                 <div className="row">
                                     <div className="col-4"><span className="lable_name">Date and Time</span></div>
                                     <div className="col-8"><span className="lable_date">: {viewData?.datetime || 'Not Available'}</span></div>
                                 </div>
-                                <h4 className="canvas_sub_title mt-2 mb-2">Payment Details</h4>
+                                <h4 className="canvas_sub_title mt-3 mb-2">Payment Details</h4>
                                 <div className="row">
                                     <div className="col-4"><span className="lable_name">Status</span></div>
                                     <div className="col-8"><span className="lable_date">: Success</span></div>
                                 </div>
-                                <h4 className="canvas_sub_title mt-2 mb-2">Notification details</h4>
+                                <h4 className="canvas_sub_title mt-3 mb-2">Notification details</h4>
                                 {/* <div className="row">
                                     <div className="col-4"><span className="lable_name">Email Notification</span></div>
                                     <div className="col-8">
@@ -257,8 +263,8 @@ const ViewTransaction = (props: any) => {
                                                             const rowColor = index === 0 ? 'row-color-0' : index === 1 ?'row-color-1':index === 2 ?'row-color-2':index === 3 ?'row-color-3':'row-color-4'; 
                                                             return (
                                                                 <tr key={index} >
-                                                                    <td  className={`text-right ${rowColor}`}>{ticket.eventTickets__ticket_name}</td>
-                                                                    <td className="text-right">N/A</td>
+                                                                    <td  className={`text-right ${rowColor}`}>{ticket.ticket_name}</td>
+                                                                    <td className="text-right">{ticket.ticket_amount}</td>
                                                                     <td style={{color:'#00900A'}} className="text-right">{ticket.count}</td>
                                                                 </tr>
                                                             );
@@ -273,7 +279,7 @@ const ViewTransaction = (props: any) => {
                                                     <span className="ticket_count_name">Total Tickets : </span><span className="ticket_count_data">{totalTicketCount}</span>
                                                 </div>
                                                 <div style={{textAlign:'right'}} className="col-6">
-                                                <span className="ticket_count_name">Total Amount : </span><span className="ticket_count_data">100.00</span>
+                                                <span className="ticket_count_name">Total Amount : </span><span className="ticket_count_data">{totalTicketAmount}</span>
                                                 </div>
                                                 </div>
                                             </div>

@@ -698,7 +698,7 @@ function Dashbord() {
                 </div>
 
 
-                <div className="row mb-2">
+                {/* <div className="row mb-2">
                     {menuItems.map((item) => (
                         <div key={item.id} className="col-2 ipg-dashbord-right">
                             <div
@@ -709,7 +709,7 @@ function Dashbord() {
                             </div>
                         </div>
                     ))}
-                </div>
+                </div> */}
 
 
 
