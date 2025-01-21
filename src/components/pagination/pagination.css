@@ -25,6 +25,11 @@
 }
 @media (max-width: 768px) {
     .left_p, .center_p, .right_p {
-        font-size: 10px;
+        font-size: 8px;
+    }
+    .left_p, .right_p {
+        border: 1px solid #D0D5DD;
+        padding: 6px 5px;
+        border-radius: 2px;
     }
 }

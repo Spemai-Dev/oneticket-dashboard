@@ -59,3 +59,8 @@ export const download = async (params) => {
   const endpoint = `organization/dashboard/report/?event_id=${params}`;
   return await getIpgReportNew(endpoint);
 };
+// resend
+export const reSend =async(params)=>{
+  // return await get("organization/dashboard/resend-event-confirmation?" + params)
+  return await get("organization/dashboard/resend-event-confirmation?" + params)
+}

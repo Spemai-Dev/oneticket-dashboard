@@ -90,7 +90,7 @@ const Pagination: React.FC<PaginationProps> = ({ count, currentPage, itemsPerPag
         
 
         <div className='row mt-4 mb-4 mr-2 ml-2'>
-  <div className='col-4'>
+  <div className='col-3'>
     <button
       className='left_p'
       disabled={currentPage === 1}
@@ -99,7 +99,7 @@ const Pagination: React.FC<PaginationProps> = ({ count, currentPage, itemsPerPag
       <span className='icon_ex'><BsArrowLeft /></span> Previous
     </button>
   </div>
-  <div className='col-4 page_c'>
+  <div className='col-6 page_c'>
     {getPaginationRange(currentPage, totalPages).map((pageNum, index) =>
       pageNum === "..." ? (
         <span key={`dots-${index}`} className="dots">...</span> // Unique key for dots
@@ -115,7 +115,7 @@ const Pagination: React.FC<PaginationProps> = ({ count, currentPage, itemsPerPag
       )
     )}
   </div>
-  <div className='col-4'>
+  <div className='col-3'>
     <button
       className='right_p'
       disabled={currentPage === totalPages}
@@ -125,6 +125,8 @@ const Pagination: React.FC<PaginationProps> = ({ count, currentPage, itemsPerPag
     </button>
   </div>
 </div>
+
+
 
 
 
