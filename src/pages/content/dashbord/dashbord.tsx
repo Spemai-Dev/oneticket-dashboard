@@ -75,30 +75,64 @@ function Dashbord() {
         return params.toString();
     }
 
-    const handleOpenOffCanvasCatCreate = async (id2) => {
-        if (!id2) return; // Ensure id is available
-
+    const handleOpenOffCanvasCatCreate = async (id2: string) => {
+        if (!id2) {
+            console.error("Transaction ID is missing.");
+            toast.error("Transaction ID is required.");
+            return;
+        }
         try {
-            console.log('Fetching details for ID:', id2);
-
-            let params = {
-                event_id: eventId,
-                transaction_id: id2
+            console.log("Fetching details for ID:", id2);
+    
+            const params = {
+                event_id: eventId, // Ensure eventId is defined in scope
+                transaction_id: (id2), // Safely convert to number
             };
+    
             const response = await getDetailsById(jsonToUrlParams(params));
             if (response?.data?.status === 200) {
-                console.log('Data:', response.data.data);
+                console.log("Data fetched successfully:", response.data.data);
                 setModalData(response.data.data);
                 setIsCategoryCreateOffCanvasOpen(true);
             } else {
-                console.error('Error:', response?.data?.message || 'Failed to fetch details');
-                toast.error(response?.data?.message || 'An error occurred.');
+                console.error("Error:", response?.data?.message || "Failed to fetch details.");
+                toast.error(response?.data?.message || "An error occurred while fetching details.");
             }
         } catch (error) {
-            console.error('Error fetching details:', error);
-            toast.error('An unexpected error occurred.');
+            console.error("Error fetching details:", error);
+            toast.error("An unexpected error occurred. Please try again.");
         }
     };
+    
+
+    
+
+    // const handleOpenOffCanvasCatCreate = async (id2) => {
+    //     if (!id2) return; 
+
+    //     try {
+    //         console.log('Fetching details for ID:', id2);
+    //         const transactionId = typeof id2 === "string" ? Number(id2) : id2;
+    //         console.log(transactionId,'44rr')
+
+    //         let params = {
+    //             event_id: eventId,
+    //             transaction_id: id2
+    //         };
+    //         const response = await getDetailsById(jsonToUrlParams(params));
+    //         if (response?.data?.status === 200) {
+    //             console.log('Data:', response.data.data);
+    //             setModalData(response.data.data);
+    //             setIsCategoryCreateOffCanvasOpen(true);
+    //         } else {
+    //             console.error('Error:', response?.data?.message || 'Failed to fetch details');
+    //             toast.error(response?.data?.message || 'An error occurred.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching details:', error);
+    //         toast.error('An unexpected error occurred.');
+    //     }
+    // };
 
     const handleCloseOffCanvasCatCreate = () => {
         setIsCategoryCreateOffCanvasOpen(false);
@@ -759,7 +793,7 @@ function Dashbord() {
                                                                 {item.is_checked_in ? "Checked in" : "Check in pending"}
                                                             </div>
 
-                                                            <div onClick={() => { handleOpenOffCanvasCatCreate(item.id) }} className="check_icon"><IoEyeOutline /></div>
+                                                            <div onClick={() => { handleOpenOffCanvasCatCreate(item.transaction_reference) }} className="check_icon"><IoEyeOutline /></div>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -796,6 +830,7 @@ function Dashbord() {
                     headline="test"
                     onClose={handleCloseOffCanvasCatCreate}
                     viewData={modalData}
+                    onRetry={handleOpenOffCanvasCatCreate}
 
                 />}
         </div>

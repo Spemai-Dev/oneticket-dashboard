@@ -10,7 +10,7 @@ import { IoRefresh } from "react-icons/io5";
 
 
 const ViewTransaction = (props: any) => {
-    const { onClose, viewData } = props;
+    const { onClose, viewData , onRetry} = props;
     const [isSubmittingSms, setIsSubmittingSms] = useState(false); // For SMS retry
     const [isSubmittingEmail, setIsSubmittingEmail] = useState(false); // For Email retry
     function jsonToUrlParams(json: any) {
@@ -67,6 +67,7 @@ const ViewTransaction = (props: any) => {
 
             // Check the response status
             if (response?.data?.status === 200) {
+                onRetry(viewData.onepay_transaction_id); 
                 toast.success(response?.data?.message || "Retry successful!");
             } else {
                 toast.error(response?.data?.message || "Retry failed.");
@@ -187,7 +188,7 @@ const ViewTransaction = (props: any) => {
                                 <div className="row">
                                     <div className="col-4"><span className="lable_name">Email Notification</span></div>
                                     <div className="col-8">
-                                        <span className={`lable_date ${viewData?.is_email_send === 1 ? 'suc_c' : 'fail_'}`}>: {viewData?.is_email_send === 1 ? 'Success' : 'Failed'}</span>
+                                        <span className={`lable_date ${viewData?.is_email_send === true ? 'suc_c' : 'fail_'}`}>: {viewData?.is_email_send === true ? 'Success' : 'Failed'}</span>
                                         <span style={{ float: "right" }}>
 
 
@@ -219,7 +220,7 @@ const ViewTransaction = (props: any) => {
                                 <div className="row">
                                     <div className="col-4"><span className="lable_name">SMS Notification</span></div>
                                     <div className="col-8">
-                                        <span className={`lable_date ${viewData?.is_sms_send === 1 ? 'suc_c' : 'fail_'}`}>: {viewData?.is_sms_send === 1 ? 'Success' : 'Failed'}</span>
+                                        <span className={`lable_date ${viewData?.is_sms_send === true ? 'suc_c' : 'fail_'}`}>: {viewData?.is_sms_send === true ? 'Success' : 'Failed'}</span>
                                         <span style={{ float: "right" }}>
                                             <button
                                                 className="resend"
