@@ -33,6 +33,10 @@ const ViewTransaction = (props: any) => {
             toast.error("Invalid retry type.");
             return;
         }
+        if (!viewData.onepay_transaction_id) {
+            toast.error("Onepay Transaction is null. Please try again.");
+            return;
+        }
 
         // Set the loader based on the retry type
         if (type === "sms") {
@@ -44,7 +48,7 @@ const ViewTransaction = (props: any) => {
         try {
             // Base parameters
             const params = {
-                onepay_transaction_id: 'S8PR118C01F68BBECA4E81',
+                onepay_transaction_id:viewData.onepay_transaction_id,
                 is_send_sms: false,
                 is_send_email: false,
             };
@@ -62,7 +66,7 @@ const ViewTransaction = (props: any) => {
             console.log('API Response:', response); // Log the entire response for debugging
 
             // Check the response status
-            if (response?.data?.status === 100) {
+            if (response?.data?.status === 200) {
                 toast.success(response?.data?.message || "Retry successful!");
             } else {
                 toast.error(response?.data?.message || "Retry failed.");
@@ -279,7 +283,7 @@ const ViewTransaction = (props: any) => {
                                                     <span className="ticket_count_name">Total Tickets : </span><span className="ticket_count_data">{totalTicketCount}</span>
                                                 </div>
                                                 <div style={{textAlign:'right'}} className="col-6">
-                                                <span className="ticket_count_name">Total Amount : </span><span className="ticket_count_data">{totalTicketAmount}</span>
+                                                <span className="ticket_count_name">Total Amount : </span><span className="ticket_count_data">{totalTicketAmount} {viewData?.currency || 'LKR'}</span>
                                                 </div>
                                                 </div>
                                             </div>
