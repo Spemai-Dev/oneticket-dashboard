@@ -483,7 +483,7 @@ function Dashbord() {
                                     </div>
                                     <div className='col-20'>
                                         <div className="section_d">
-                                            <p className="dh_data_head event_ticket_name">Tickets Avalability</p>
+                                            <p className="dh_data_head event_ticket_name">Tickets Availability</p>
 
                                         </div>
                                     </div>
@@ -535,7 +535,7 @@ function Dashbord() {
                                                 <div className='col-20'>
                                                     <div className="section_d">
 
-                                                        <p className="dh_data">{ticket.ticket_visualize_amount}</p>
+                                                        <p className="dh_data">{ticket.ticket_amount}</p>
                                                     </div>
                                                 </div>
                                                 {/* <div className='col-20'>
