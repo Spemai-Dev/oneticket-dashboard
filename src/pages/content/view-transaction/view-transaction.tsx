@@ -153,6 +153,14 @@ const ViewTransaction = (props: any) => {
                                     <div className="col-4"><span className="lable_name">Status</span></div>
                                     <div className="col-8"><span className="lable_date">: Success</span></div>
                                 </div>
+                                <div className="row new_css">
+                                    <div className="col-4"><span className="lable_name">Onepay Transaction ID</span></div>
+                                    <div className="col-8"><span className="lable_date">: {viewData?.onepay_transaction_id || 'Not Available'}</span></div>
+                                </div>
+                                <div className="row new_css">
+                                    <div className="col-4"><span className="lable_name">Payment Method</span></div>
+                                    <div className="col-8"><span className="lable_date">: {viewData?.provider || 'Not Available'}</span></div>
+                                </div>
                                 <h4 className="canvas_sub_title mt-3 mb-2">Notification details</h4>
                                 {/* <div className="row">
                                     <div className="col-4"><span className="lable_name">Email Notification</span></div>

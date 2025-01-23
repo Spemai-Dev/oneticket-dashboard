@@ -151,14 +151,14 @@ font-weight: 600;
     font-weight: 400;
    }
    @media (max-width: 768px) {
-    .ticket_count_name {
-      font-size: 14px;
+    .ticket_count_data {
+      font-size: 16px;
     }
     .lable_name{
      line-height: 0px;
     }
     .new_css{
-    margin-bottom: 3px;
+    margin-bottom: 6px;
     }
 }
   
