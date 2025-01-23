@@ -7,10 +7,11 @@ import { reSend } from "../../../_services/dashboard.js";
 
 import toast, { Toaster } from 'react-hot-toast';
 import { IoRefresh } from "react-icons/io5";
+import { IoIosClose } from "react-icons/io";
 
 
 const ViewTransaction = (props: any) => {
-    const { onClose, viewData , onRetry} = props;
+    const { onClose, viewData, onRetry } = props;
     const [isSubmittingSms, setIsSubmittingSms] = useState(false); // For SMS retry
     const [isSubmittingEmail, setIsSubmittingEmail] = useState(false); // For Email retry
     function jsonToUrlParams(json: any) {
@@ -48,7 +49,7 @@ const ViewTransaction = (props: any) => {
         try {
             // Base parameters
             const params = {
-                onepay_transaction_id:viewData.onepay_transaction_id,
+                onepay_transaction_id: viewData.onepay_transaction_id,
                 is_send_sms: false,
                 is_send_email: false,
             };
@@ -67,7 +68,7 @@ const ViewTransaction = (props: any) => {
 
             // Check the response status
             if (response?.data?.status === 200) {
-                onRetry(viewData.onepay_transaction_id); 
+                onRetry(viewData.onepay_transaction_id);
                 toast.success(response?.data?.message || "Retry successful!");
             } else {
                 toast.error(response?.data?.message || "Retry failed.");
@@ -92,8 +93,8 @@ const ViewTransaction = (props: any) => {
             <OffCanvas heading="Expenses details">
                 <Toaster position="top-right" reverseOrder={false} />
                 <div className="canvas_body">
-                    <div className="row mb-4">
-                        <div className="col-12 d-flex justify-content-between mb-2">
+                    {/* <div className="row mb-4 d-flex justify-content-between">
+                        <div className="col-12 mb-2">
                             <div className="tittle2">View Details</div>
                             <img
                                 className="pe-2 close-icon"
@@ -102,38 +103,53 @@ const ViewTransaction = (props: any) => {
                                 onClick={onClose}
                             />
                         </div>
+                    </div> */}
+                    <div className="row">
+                        <div className="col-9">
+                            <span className="tittle2">View Details</span>
+                        </div>
+                        <div style={{ textAlign: 'right' }} className="col-3">
+                        <img
+                                className="pe-2 close-icon"
+                                src={group1}
+                                alt="Close"
+                                onClick={onClose}
+                            />
+                        </div>
                     </div>
+
+
                     <div className="row canvas_body2">
                         <div className="col-12">
                             <div className="d">
                                 <h4 className="canvas_sub_title mt-2">User Details</h4>
-                                <div className="row">
+                                <div className="row new_css">
                                     <div className="col-4"><span className="lable_name">First Name </span></div>
                                     <div className="col-8"><span className="lable_date">:  {viewData?.customer_first_name || 'Not Available'}</span></div>
                                 </div>
-                                <div className="row">
+                                <div className="row new_css">
                                     <div className="col-4"><span className="lable_name">Last Name</span></div>
                                     <div className="col-8"><span className="lable_date">: {viewData?.customer_last_name || 'Not Available'}</span></div>
                                 </div>
-                                <div className="row">
+                                <div className="row new_css">
                                     <div className="col-4"><span className="lable_name">Email Address</span></div>
                                     <div className="col-8"><span className="lable_date">: {viewData?.customer_email || 'Not Available'}</span></div>
                                 </div>
-                                <div className="row">
+                                <div className="row new_css">
                                     <div className="col-4"><span className="lable_name">Phone Number</span></div>
                                     <div className="col-8"><span className="lable_date">: {viewData?.customer_phone_no || 'Not Available'}</span></div>
                                 </div>
-                               
-                                <div className="row">
+
+                                <div className="row new_css">
                                     <div className="col-4"><span className="lable_name">Verification ID</span></div>
                                     <div className="col-8"><span className="lable_date">: {viewData?.verification_id || 'Not Available'} ({viewData?.verification_method || 'Not Available'})</span></div>
                                 </div>
-                                <div className="row">
+                                <div className="row new_css">
                                     <div className="col-4"><span className="lable_name">Date and Time</span></div>
                                     <div className="col-8"><span className="lable_date">: {viewData?.datetime || 'Not Available'}</span></div>
                                 </div>
                                 <h4 className="canvas_sub_title mt-3 mb-2">Payment Details</h4>
-                                <div className="row">
+                                <div className="row new_css">
                                     <div className="col-4"><span className="lable_name">Status</span></div>
                                     <div className="col-8"><span className="lable_date">: Success</span></div>
                                 </div>
@@ -185,7 +201,7 @@ const ViewTransaction = (props: any) => {
                                         </span>
                                         </div>
                                 </div> */}
-                                <div className="row">
+                                <div className="row new_css">
                                     <div className="col-4"><span className="lable_name">Email Notification</span></div>
                                     <div className="col-8">
                                         <span className={`lable_date ${viewData?.is_email_send === true ? 'suc_c' : 'fail_'}`}>: {viewData?.is_email_send === true ? 'Success' : 'Failed'}</span>
@@ -217,7 +233,7 @@ const ViewTransaction = (props: any) => {
                                     </div>
                                 </div>
 
-                                <div className="row">
+                                <div className="row new_css">
                                     <div className="col-4"><span className="lable_name">SMS Notification</span></div>
                                     <div className="col-8">
                                         <span className={`lable_date ${viewData?.is_sms_send === true ? 'suc_c' : 'fail_'}`}>: {viewData?.is_sms_send === true ? 'Success' : 'Failed'}</span>
@@ -265,12 +281,12 @@ const ViewTransaction = (props: any) => {
                                                     <tbody>
                                                         {viewData?.tickets?.map((ticket, index) => {
                                                             // You can assign colors based on the index or any condition you prefer
-                                                            const rowColor = index === 0 ? 'row-color-0' : index === 1 ?'row-color-1':index === 2 ?'row-color-2':index === 3 ?'row-color-3':'row-color-4'; 
+                                                            const rowColor = index === 0 ? 'row-color-0' : index === 1 ? 'row-color-1' : index === 2 ? 'row-color-2' : index === 3 ? 'row-color-3' : 'row-color-4';
                                                             return (
                                                                 <tr key={index} >
-                                                                    <td  className={`text-right ${rowColor}`}>{ticket.ticket_name}</td>
+                                                                    <td className={`text-right ${rowColor}`}>{ticket.ticket_name}</td>
                                                                     <td className="text-right">{ticket.ticket_amount}</td>
-                                                                    <td style={{color:'#00900A'}} className="text-right">{ticket.count}</td>
+                                                                    <td style={{ color: '#00900A' }} className="text-right">{ticket.count}</td>
                                                                 </tr>
                                                             );
                                                         })}
@@ -280,24 +296,24 @@ const ViewTransaction = (props: any) => {
                                             </div>
                                             <div className="col-12 mt-1 mb-4">
                                                 <div className="row">
-                                                <div className="col-6">
-                                                    <span className="ticket_count_name">Total Tickets : </span><span className="ticket_count_data">{totalTicketCount}</span>
-                                                </div>
-                                                <div style={{textAlign:'right'}} className="col-6">
-                                                <span className="ticket_count_name">Total Amount : </span><span className="ticket_count_data">{totalTicketAmount} {viewData?.currency || 'LKR'}</span>
-                                                </div>
+                                                    <div className="col-5">
+                                                        <span className="ticket_count_name">Total Tickets : </span><span className="ticket_count_data">{totalTicketCount}</span>
+                                                    </div>
+                                                    <div style={{ textAlign: 'right' }} className="col-7">
+                                                        <span className="ticket_count_name">Total Amount : </span><span className="ticket_count_data">{viewData?.currency || 'LKR'} {totalTicketAmount}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                                        
+
+
 
                                     ) : (
                                         <p>No tickets available.</p>
                                     )}
 
                                 </div>
-                               
+
 
                             </div>
                         </div>

@@ -104,36 +104,6 @@ function Dashbord() {
         }
     };
     
-
-    
-
-    // const handleOpenOffCanvasCatCreate = async (id2) => {
-    //     if (!id2) return; 
-
-    //     try {
-    //         console.log('Fetching details for ID:', id2);
-    //         const transactionId = typeof id2 === "string" ? Number(id2) : id2;
-    //         console.log(transactionId,'44rr')
-
-    //         let params = {
-    //             event_id: eventId,
-    //             transaction_id: id2
-    //         };
-    //         const response = await getDetailsById(jsonToUrlParams(params));
-    //         if (response?.data?.status === 200) {
-    //             console.log('Data:', response.data.data);
-    //             setModalData(response.data.data);
-    //             setIsCategoryCreateOffCanvasOpen(true);
-    //         } else {
-    //             console.error('Error:', response?.data?.message || 'Failed to fetch details');
-    //             toast.error(response?.data?.message || 'An error occurred.');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching details:', error);
-    //         toast.error('An unexpected error occurred.');
-    //     }
-    // };
-
     const handleCloseOffCanvasCatCreate = () => {
         setIsCategoryCreateOffCanvasOpen(false);
 
