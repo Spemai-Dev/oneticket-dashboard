@@ -308,7 +308,7 @@ const ViewTransaction = (props: any) => {
                                                         <span className="ticket_count_name">Total Tickets : </span><span className="ticket_count_data">{totalTicketCount}</span>
                                                     </div>
                                                     <div style={{ textAlign: 'right' }} className="col-7">
-                                                        <span className="ticket_count_name">Total Amount : </span><span className="ticket_count_data">{viewData?.currency || 'LKR'} {totalTicketAmount}</span>
+                                                        <span className="ticket_count_name">Total Amount : </span><span className="git">{viewData?.currency || 'LKR'} {totalTicketAmount}</span>
                                                     </div>
                                                 </div>
                                             </div>
