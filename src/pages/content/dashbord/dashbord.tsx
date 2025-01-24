@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import { getALLevent, getEventDetails, getPartiDetails, geteventVolume, getDetailsById, getEventS, download } from "../../../_services/dashboard.js";
 import { Formik, Form, Field } from 'formik';
 import Pagination from "../../../components/pagination/pagination.tsx";
+import { LuMailX } from "react-icons/lu";
+import { MdOutlineMarkEmailRead } from "react-icons/md";
 
 interface Ticket {
     id: number;
@@ -56,6 +58,7 @@ function Dashbord() {
     const [modalData, setModalData] = useState(null);
     const [isCategoryCreateOffCanvasOpen, setIsCategoryCreateOffCanvasOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [filterStatus, setFilterStatus] = useState(null);
 
     const handlePageChange = async (pageNumber: any) => {
         await setCurrentPage(pageNumber);
@@ -72,31 +75,35 @@ function Dashbord() {
         return params.toString();
     }
 
-    const handleOpenOffCanvasCatCreate = async (id2) => {
-        if (!id2) return; // Ensure id is available
-
+    const handleOpenOffCanvasCatCreate = async (id2: string) => {
+        if (!id2) {
+            console.error("Transaction ID is missing.");
+            toast.error("Transaction ID is required.");
+            return;
+        }
         try {
-            console.log('Fetching details for ID:', id2);
-
-            let params = {
-                event_id: eventId,
-                transaction_id: id2
+            console.log("Fetching details for ID:", id2);
+    
+            const params = {
+                event_id: eventId, // Ensure eventId is defined in scope
+                transaction_id: (id2), // Safely convert to number
             };
+    
             const response = await getDetailsById(jsonToUrlParams(params));
             if (response?.data?.status === 200) {
-                console.log('Data:', response.data.data);
+                console.log("Data fetched successfully:", response.data.data);
                 setModalData(response.data.data);
                 setIsCategoryCreateOffCanvasOpen(true);
             } else {
-                console.error('Error:', response?.data?.message || 'Failed to fetch details');
-                toast.error(response?.data?.message || 'An error occurred.');
+                console.error("Error:", response?.data?.message || "Failed to fetch details.");
+                toast.error(response?.data?.message || "An error occurred while fetching details.");
             }
         } catch (error) {
-            console.error('Error fetching details:', error);
-            toast.error('An unexpected error occurred.');
+            console.error("Error fetching details:", error);
+            toast.error("An unexpected error occurred. Please try again.");
         }
     };
-
+    
     const handleCloseOffCanvasCatCreate = () => {
         setIsCategoryCreateOffCanvasOpen(false);
 
@@ -323,6 +330,19 @@ function Dashbord() {
             setLoading(false); // Set loading to false after data fetch is complete
         }
     };
+    const handleItemClick = (value) => {
+        setFilterStatus(value);
+        // Implement additional logic as needed
+    };
+    const menuItems = [
+        { id: '1', label: 'ALL' },
+        { id: '2', label: 'Text 1' },
+        { id: '3', label: 'Text 2' },
+        { id: '4', label: 'Text 3' },
+        { id: '5', label: 'Text 4' },
+        { id: '6', label: 'Text 5' },
+    ];
+
     return (
         <div className='main'>
             <div className="container mt-3">
@@ -356,18 +376,19 @@ function Dashbord() {
                             </Form>
                         )}
                     </Formik>
-                </span></h3>
+                </span>
+                </h3>
                 <div className='row'>
                     <div className='col-sm-12 col-md-6 col-lg-6'>
                         <div className='row'>
-                            <div className='col-6'>
+                            <div className='col-sm-12 col-md-6 col-lg-6 responsive_tab'>
                                 <div className='menu_itam'  >
                                     {/* <p className='dh-count mt-3'>{totalTicketsSold}</p> */}
                                     <p className='dh-count mt-3'> {(volume && volume.total_tickets && !isNaN(volume.total_tickets) ? volume.total_tickets : '0')}</p>
                                     <p className='dh-sub-description mt-3'>Number of Ticket Sale</p>
                                 </div>
                             </div>
-                            <div className='col-6'>
+                            <div className='col-sm-12 col-md-6 col-lg-6 responsive_tab'>
                                 <div className='menu_itam2'  >
                                     {/* <p className='dh-count2 mt-3'>{totalSalesAmount.toFixed(2)}  <span className='dh-currency'>{eventData.tickets_currency || 'N/A'}</span></p> */}
                                     <p className='dh-count2 mt-3'>
@@ -633,12 +654,11 @@ function Dashbord() {
 
                 </div>
 
-                <div className="row mb-4 mt-4">
+                <div className="row mb-2 mt-4">
                     <div className="col d-flex justify-content-between align-items-center">
-                        <h3 className="event_name_sub mb-4 mt-4">Participants List</h3>
+                        <h3 className="event_name_sub">Participants List </h3>
 
                         <div className="d-flex justify-content-end align-items-center">
-                            {/* <span style={{ color: '#8E00AB', fontSize: 'large' }}><CgSoftwareDownload /><span style={{ fontSize: '14px', color: '#8E00AB', marginLeft: '3px', fontWeight: '500', marginRight: '10px' }}>Download Reports</span></span> */}
                             {dataCount > 0 && (
                                 <div
                                     onClick={handleDownload}
@@ -680,6 +700,27 @@ function Dashbord() {
                         </div>
                     </div>
                 </div>
+
+
+                {/* <div className="row mb-2">
+                    {menuItems.map((item) => (
+                        <div key={item.id} className="col-2 ipg-dashbord-right">
+                            <div
+                                className={`menu_item ${filterStatus === item.id ? 'clicked' : 'clicked2'}`}
+                                onClick={() => handleItemClick(item.id)}
+                            >
+                                <span className="button_name">{item.label}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div> */}
+
+
+
+
+
+
+
                 <div className='table_data_grid'>
                     <div className='default-table table-container'>
                         <div className="table_scroll">
@@ -694,7 +735,7 @@ function Dashbord() {
                                         <th className="table_header_text">STATUS</th>
                                         {/* <th className="table_header_text">TICKET COUNT</th> */}
                                         <th className="table_header_text">PAID AMOUNT</th>
-                                        {/* <th className="table_header_text">PAYMENT TYPE</th> */}
+                                        {/* <th className="table_header_text">Sender ID</th> */}
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -708,6 +749,9 @@ function Dashbord() {
                                                 <td className="inventory_td">{item.customer_email}</td>
                                                 <td className="inventory_td">{item.is_refund ? "Refund" : "Paid"}</td>
                                                 <td className="inventory_td">{item.total_amount} LKR</td>
+                                                {/* <td className="inventory_td">
+                                                    <span className="retry">   <LuMailX /> Retry</span>
+                                                </td> */}
 
                                                 <td>
                                                     <div className="row">
@@ -719,7 +763,7 @@ function Dashbord() {
                                                                 {item.is_checked_in ? "Checked in" : "Check in pending"}
                                                             </div>
 
-                                                            <div onClick={() => { handleOpenOffCanvasCatCreate(item.id) }} className="check_icon"><IoEyeOutline /></div>
+                                                            <div onClick={() => { handleOpenOffCanvasCatCreate(item.transaction_reference) }} className="check_icon"><IoEyeOutline /></div>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -756,6 +800,7 @@ function Dashbord() {
                     headline="test"
                     onClose={handleCloseOffCanvasCatCreate}
                     viewData={modalData}
+                    onRetry={handleOpenOffCanvasCatCreate}
 
                 />}
         </div>

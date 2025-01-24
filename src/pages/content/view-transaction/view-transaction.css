@@ -46,6 +46,12 @@
     color: #3F3F3F;
     line-height: 32px;
 }
+.label_date_retry{
+    font-size: 16px;
+    color: red;
+    font-weight: 600;
+    line-height: 32px;
+}
 
 .lable_date {
     font-size: 16px;
@@ -90,3 +96,70 @@ font-weight: 600;
     font-size: 24px;
     font-weight: 600;  
 }
+.resend {
+    background-color: transparent;
+    border: none; /* Light grey border */
+    box-shadow:none; /* Subtle shadow */
+    color: #016FD0; /* Dark grey text */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+  }
+  
+  .suc_c{
+    color: #00900A;
+
+  }
+  .fail_{
+    color: #FF0004;
+  }
+  .row-color-0 {
+    color: #C67300!important;/* Light color */
+  }
+  
+  .row-color-1 {
+   color: #016FD0!important;
+  }
+  .row-color-2 {
+    color: #D001A0!important;
+   }
+   .row-color-3 {
+    color: green!important;
+   }
+   .row-color-4 {
+    color: yellow!important;
+   }
+   .table .t_head{
+    font-size: 12px;
+    color: #7D7D7D;
+    font-weight: 400;
+   }
+   .table .text-right{
+    border-bottom: 1px solid #7D7D7D;
+   }
+   .table .t_head{
+    border-bottom: 1px solid #7D7D7D;
+   }
+   .ticket_count_name{
+    color: #7D7D7D;
+    font-size: 14px;
+    font-weight: 400;
+   }
+   .ticket_count_data{
+    font-size: 20px;
+    font-weight: 400;
+   }
+   @media (max-width: 768px) {
+    .ticket_count_data {
+      font-size: 16px;
+    }
+    .lable_name{
+     line-height: 0px;
+    }
+    .new_css{
+    margin-bottom: 6px;
+    }
+}
+  
+  
