@@ -86,7 +86,7 @@ const ViewTransaction = (props: any) => {
         }
     };
     const totalTicketCount = viewData?.tickets?.reduce((total, ticket) => total + ticket.count, 0);
-    const totalTicketAmount = viewData?.tickets?.reduce((total, ticket) => total + ticket.ticket_amount, 0);
+    const totalTicketAmount = viewData?.tickets?.reduce((total, ticket) => total + (ticket.ticket_amount * ticket.count), 0);
 
     return (
         <div >
