@@ -1,0 +1,18 @@
+runtime: nodejs18
+
+service: prod-dashboard
+
+instance_class: F1
+
+env_variables:
+  NODE_ENV: 'production'
+
+handlers:
+  - url: /static
+    static_dir: build/static
+  - url: /(.*\.(js|css|map|ico|json|png|jpg))
+    static_files: build/\1
+    upload: build/.*\.(js|css|map|ico|json|png|jpg)
+  - url: /.*
+    static_files: build/index.html
+    upload: build/index.html
